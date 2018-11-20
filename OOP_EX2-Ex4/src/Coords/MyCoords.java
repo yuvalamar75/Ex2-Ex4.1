@@ -13,12 +13,13 @@ public class MyCoords implements coords_converter{
 		Point3D gpsn=new Point3D(latn,lonn,hn);
 		return gpsn;
 	}
+
 public double distance3d(Point3D gps0, Point3D gps1) {
 		double lonnorm=Math.cos(gps0.x()*(Math.PI/180));
 		double diflon;
 		double diflat;
 		double difalt;
-		
+
 		double dif_radlat;
 		double dif_radlon;
 		double altmeter;
