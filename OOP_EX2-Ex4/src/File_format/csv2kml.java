@@ -11,6 +11,10 @@ public class csv2kml {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) 
 		{
+			br.readLine();
+			br.readLine();
+			
+			
 			while ((line = br.readLine()) != null) 
 			{
 				String[] userInfo = line.split(cvsSplitBy);
