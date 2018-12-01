@@ -1,19 +1,38 @@
 package Coords;
 
 import Geom.Point3D;
+/**
+ * This class implement coords_converter interface
+ * The class has functions that Performs operations on GPS coordinates.
+ *	Like adding,distanced,vectorin3D etc.
+ *
+ * 
+ * @author YuVaLAndDvIr
+ *
+ */
+
 
 public class MyCoords implements coords_converter{
 	final double EARTH_RADIUS=6371000;
+	/* computes a new point which is the gps point transformed by a 3D vector (in meters)/
+	 * 
+	 */
 	public Point3D add(Point3D gps, Point3D local_vector_in_meter) {
-		double dlat=local_vector_in_meter.x()/EARTH_RADIUS;
-		double dlon=local_vector_in_meter.y()/(EARTH_RADIUS*Math.cos(Math.PI*gps.x()/180));
-		double latn=gps.x() + dlat*180/Math.PI;
-		double lonn=gps.y() + dlon*180/Math.PI;
-		double hn=gps.z()+local_vector_in_meter.z();
-		Point3D gpsn=new Point3D(latn,lonn,hn);
+		double Lon_Norm=Math.cos(gps.get_x()*Math.PI/180);
+		double x=Math.asin(local_vector_in_meter.x()/EARTH_RADIUS)*(180/Math.PI)+gps.x();
+		double y=Math.asin(local_vector_in_meter.y()/(EARTH_RADIUS*Lon_Norm))*(180/Math.PI)+gps.y();
+		double z=gps.z()+local_vector_in_meter.z();
+		Point3D gpsn=new Point3D(x,y,z);
 		return gpsn;
+		
+		
 	}
-
+	/** 
+	 * computes the 3D distance (in meters) between the two gps like points 
+	 * @param gps0
+	 * @param gps1
+	 * @return
+	 */
 public double distance3d(Point3D gps0, Point3D gps1) {
 		double lonnorm=Math.cos(gps0.x()*(Math.PI/180));
 		double diflon;
@@ -36,30 +55,26 @@ public double distance3d(Point3D gps0, Point3D gps1) {
 		 return distance;
 		
 	}
-
+/** 
+ * computes the 3D vector (in meters) between two gps like points 
+ * */
 	@Override
 	public Point3D vector3D(Point3D gps0, Point3D gps1) {
 
 		double lonNorm=Math.cos(gps0.x()*Math.PI/180);
-		
 		double diff_lat =gps1.x()-gps0.x();
-		
 		double diff_lon=gps1.y()-gps0.y();
-		
 		double diff_z=gps1.z()-gps0.z();
-		
 		double diff_radianlat=diff_lat*Math.PI/180;
-		
 		double diff_radianlon=diff_lon*Math.PI/180;
-		
 		double toMeterlat=Math.sin(diff_radianlat)*EARTH_RADIUS;
-		
 		double toMeterlon=Math.sin(diff_radianlon)*lonNorm*EARTH_RADIUS;
 		return new Point3D(toMeterlat, toMeterlon, diff_z);
 		
 		
 	}
-
+	/** computes the polar representation of the 3D vector be gps0-->gps1 
+	 * Note: this method should return an azimuth (aka yaw), elevation (pitch), and distance*/
 	@Override
 	public double[] azimuth_elevation_dist(Point3D gps0, Point3D gps1) {
 		
@@ -71,9 +86,7 @@ public double distance3d(Point3D gps0, Point3D gps1) {
 				double left = Math.sin(delta)*Math.cos(latgps1);
 				double right = Math.cos(latgps0)*Math.sin(latgps1)-Math.sin(latgps0)*Math.cos(latgps1)*Math.cos(delta);
 				double	azimut = Math.atan2(left, right);
-				//**distance**//
 				double distance = distance3d(gps0,gps1);
-				//**elevation**//
 				azimut = Math.toDegrees(azimut);
 				if(azimut<0) azimut+=360;
 				double high = gps1.z() - gps0.z();
@@ -83,12 +96,16 @@ public double distance3d(Point3D gps0, Point3D gps1) {
 				return arr;
 
 			}
-
+	/**
+	 * return true iff this point is a valid lat, lon , lat coordinate: [-180,+180],[-90,+90],[-450, +inf]
+	 * @param p
+	 * @return
+	 */
 	
 	@Override
 	public boolean isValid_GPS_Point(Point3D p) {
-		if ((p.x()<180 ||  p.x()>-180) || (p.y()<-90 || p.y()>90) || (p.z()<-450 )) return false;
-		return true;
+		if ((p.x()<=180 && p.x()>=-180) && (p.y()>=-90 && p.y()<=90) && (p.z()>=-450 )) return true;
+		return false;
 }
 }
 	

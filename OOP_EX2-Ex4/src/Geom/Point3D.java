@@ -6,8 +6,34 @@ public class Point3D implements Geom_element, Serializable
 	/**
 	 * This class represents a 3D point in space.
 	 */
+	final double EARTH_RADIUS=6371000;
+
 	private static final long serialVersionUID = 1L;
 	private double _x,_y,_z;
+
+	public double get_x() {
+		return _x;
+	}
+
+	public void set_x(double _x) {
+		this._x = _x;
+	}
+
+	public double get_y() {
+		return _y;
+	}
+
+	public void set_y(double _y) {
+		this._y = _y;
+	}
+
+	public double get_z() {
+		return _z;
+	}
+
+	public void set_z(double _z) {
+		this._z = _z;
+	}
 
 	public Point3D(double x,double y,double z) 
 	{
@@ -59,12 +85,34 @@ public class Point3D implements Geom_element, Serializable
 		return this.distance3D(p2.x(), p2.y(), p2.z());}
 	public double distance3D(double x, double y , double z)
 	{
-		double dx = _x-x;
+		/*double dx = _x-x;
 		double dy = _y-y;
 		double dz = _z-z;
 		double t = dx*dx+dy*dy+dz*dz;
-		return Math.sqrt(t);
-	}
+		return Math.sqrt(t);*/
+			double lonnorm=Math.cos(this.x()*(Math.PI/180));
+			double diflon;
+			double diflat;
+			double difalt;
+
+			double dif_radlat;
+			double dif_radlon;
+			double altmeter;
+			double lonmeter;
+			 diflat = x-this.x();
+			 diflon = y-this.y();
+			 difalt = z-this.z();
+			 dif_radlat = diflat*Math.PI/180;
+			 dif_radlon = diflon*Math.PI/180;
+			 altmeter = Math.sin(dif_radlat)*EARTH_RADIUS;
+			 lonmeter = Math.sin(dif_radlon)*EARTH_RADIUS*lonnorm;
+			
+			 double distance= Math.sqrt(Math.pow(altmeter, 2)+Math.pow(lonmeter, 2));
+			 return distance;
+			
+		}
+	
+	
 
 	public boolean equals(Point3D p2)
 	{
