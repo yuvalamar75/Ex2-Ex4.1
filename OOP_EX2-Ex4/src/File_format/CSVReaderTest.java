@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+/*
+ * This check that the CSVReader works.
+ */
 class CSVReaderTest {
-	String path="‪‪D:\\test\\WigleWifi_20171201110209.csv";
+	
+
+	String path="C:\\\\Users\\\\YuvalAmar\\\\Desktop\\\\WigleWifi_20171201110209.csv";
 	ArrayList<String[]> data;
 
 	@BeforeAll

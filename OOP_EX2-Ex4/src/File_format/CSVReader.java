@@ -25,9 +25,6 @@ public class CSVReader{
 			{
 				String[] userInfo = line.split(cvsSplitBy);
 				data.add(userInfo);
-			/*	String s1=userInfo[0]+ ","+userInfo[1]+","+userInfo[2]+","+userInfo[3]+","+userInfo[4]+","+
-						userInfo[5]+","+userInfo[6]+","+userInfo[7]+","+userInfo[8]+","+userInfo[9]+","+userInfo[10];
-						data.add(s1);*/
 			}
 
 		} catch (IOException e) 
@@ -35,6 +32,15 @@ public class CSVReader{
 			e.printStackTrace();
 		}
 		return data;
+	}
+	public static void main(String[] args) {
+		String path="C:\\Users\\YuvalAmar\\Desktop\\WigleWifi_20171201110209.csv";
+		ArrayList<String[]> data;
+		data=CSVReader.data(path);
+		String[] a=data.get(2);
+		String actual=a[1];	
+		System.out.println(actual);
+		
 	}
 	
 	
