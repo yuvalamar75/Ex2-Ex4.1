@@ -128,13 +128,4 @@ public class MultiCSV {
 			e.printStackTrace();
 		}
 	}
-	public static void main (String[] args) {
-		String input ="D:\\test";
-		GISProject a=multyCSV(input);
-		System.out.println(a.get_Meta_data());
-		String output="D:\\test\\new.kml";
-		MultyCsvToKml(a, output);
-		
-		
-	}
 }
