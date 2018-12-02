@@ -12,9 +12,9 @@ folder that contains some csv files will be GISproject.
 
    # Algorithms:
    
-    classe contains:GISLayer,GISLayerProjectMD,GISProject,MetaData,MultiCSV,ToGisElement.
-    MultiCSV:the main class that convert from project to kml file.
-    GISLayer,GISLayerProjectMD,GISProject,MetaData,ToGisElement:clsses that crate each element.
+   classe contains:GISLayer,GISLayerProjectMD,GISProject,MetaData,MultiCSV,ToGisElement.
+   MultiCSV:the main class that convert from project to kml file.
+   GISLayer,GISLayerProjectMD,GISProject,MetaData,ToGisElement:clsses that crate each element.
     
   # Coords:
    classes contains:coords_converter,MyCoords,MyCoordsTest
@@ -31,8 +31,8 @@ folder that contains some csv files will be GISproject.
    Point3D:This class excecute Math calculation on Point3D.
    
    # GIS:
-    classe contains:GIS_element,GIS_layer,GIS_project,Meta_data.
-    GIS_element,GIS_layer,GIS_project,Meta_data:the intefaces that we used in Algorithms.
+   classe contains:GIS_element,GIS_layer,GIS_project,Meta_data.
+   GIS_element,GIS_layer,GIS_project,Meta_data:the intefaces that we used in Algorithms.
     
     
    
