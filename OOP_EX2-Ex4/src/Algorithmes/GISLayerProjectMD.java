@@ -11,6 +11,7 @@ import Geom.Point3D;
  
 /*
  * This class implements the Meta_data interface for the GISProject and GISLayer.
+ * return the time that the layer/project created.
  */
 public class GISLayerProjectMD implements Meta_data {
 	String s1=new SimpleDateFormat("yyyy-dd-MM hh:mm:ss").format(Calendar.getInstance().getTime());;

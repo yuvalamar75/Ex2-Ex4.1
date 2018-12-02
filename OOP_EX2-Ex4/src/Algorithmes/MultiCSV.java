@@ -30,12 +30,12 @@ public class MultiCSV {
 	 */
 	static ArrayList<String> content;
 	static ArrayList<String> files;
-	public static GISProject parseForCsvFiles(String parentDirectory){
-		files = new ArrayList<>();
+	public static GISProject multyCSV(String parentDirectory){
+		files = new ArrayList<>();//arrayslist that contain all the path for csv files in the folder.
 		File[] filesInDirectory = new File(parentDirectory).listFiles();
 		for(File f : filesInDirectory){
 			if(f.isDirectory()){
-				parseForCsvFiles(f.getAbsolutePath());
+				multyCSV(f.getAbsolutePath());
 			}
 			String filePath = f.getAbsolutePath();
 			String fileExtenstion = filePath.substring(filePath.lastIndexOf(".") + 1,filePath.length());
@@ -46,7 +46,7 @@ public class MultiCSV {
 		}
 		Set<GIS_layer> pro = new HashSet<>();
 		GISProject project=new GISProject(pro);
-		
+		//creating new project and layers that will contain GISelemnts.
 		for (int i = 0; i < files.size(); i++) {
 			ArrayList<String[]> data=CSVReader.data(files.get(i));
 			Set<GIS_element> set = new HashSet<>();
@@ -62,14 +62,13 @@ public class MultiCSV {
 		return  project;
 	}
 
-	public static ArrayList<String> getFiles() {
-		return files;
-	}
+	
 	/*
 	 * This function get GISProject and Path of file that we want to write on it,
 	 * and converts all the elements to kml file.
 	 */
 	public static void MultyCsvToKml(GISProject project,String output) {
+		//template for kml start.
 		String kmlstart = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 				"<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
 		String kmlduc = "<Document>";
@@ -91,9 +90,9 @@ public class MultiCSV {
 			FileWriter fw = new FileWriter(output);
 			BufferedWriter bw = new BufferedWriter(fw);
 			while(pro.hasNext()) {
-				temp=pro.next();
+				temp=pro.next();//getting the layers in the project
 				Iterator<GIS_element> it=temp.iterator();
-				counter++;
+				counter++;//counter for folders in the kml.
 				content.add(kmlfolders);
 				content.add(kmlnamefs);
 				kmlfoldername=Integer.toString(counter);
@@ -103,7 +102,7 @@ public class MultiCSV {
 						
 				while(it.hasNext()) {
 					
-					ToGisElement tempgis=(ToGisElement) it.next();
+					ToGisElement tempgis=(ToGisElement) it.next();//getting the elements in the layers.
 					String kmlelement ="<Placemark>\n" +
 							"<TimeStamp>\n"
 							+ "<when>"+tempgis.gettime()+"</when>\n </TimeStamp>\n"+
@@ -128,5 +127,14 @@ public class MultiCSV {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public static void main (String[] args) {
+		String input ="D:\\test";
+		GISProject a=multyCSV(input);
+		System.out.println(a.get_Meta_data());
+		String output="D:\\test\\new.kml";
+		MultyCsvToKml(a, output);
+		
+		
 	}
 }
