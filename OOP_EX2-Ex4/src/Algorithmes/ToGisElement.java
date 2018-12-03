@@ -42,7 +42,7 @@ public class ToGisElement implements GIS_element {
 	}
 	@Override
 	public Geom_element getGeom() {
-		Geom_element G = new GeomElement(data);
+		Geom_element G = new GeomElement(p);
 		return  G;
 	}
 	/*
