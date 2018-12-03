@@ -58,7 +58,7 @@ public class GISLayer implements GIS_layer {
 	@Override
 	public Iterator<GIS_element> iterator() {
 		return set.iterator();
-		
+
 
 	}
 
@@ -95,15 +95,15 @@ public class GISLayer implements GIS_layer {
 	@Override
 	public Meta_data get_Meta_data() {
 		GISLayerProjectMD m=new GISLayerProjectMD();
-		
+
 		return m;		
 	}
-	
+
 	public Set<GIS_element> getList(){
 		return this.set;
 	}
-	
-	
-		
-	}
-	
+
+
+
+}
+

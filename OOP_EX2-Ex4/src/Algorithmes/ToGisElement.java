@@ -27,9 +27,18 @@ public class ToGisElement implements GIS_element {
 		 double z = Double.parseDouble(data[8]);
 		 p= new Point3D(x,y,z);
 		 
+		 
 		/*
 		 * this function return the Geom_element 
 		 */
+	}
+	
+	public ToGisElement(String [] data ,int x, int y, int z) {
+		this.data= data;
+		double _x= Double.parseDouble(data[x]);
+		double _y= Double.parseDouble(data[y]);
+		double _z= Double.parseDouble(data[z]);
+		 p= new Point3D(_x,_y,_z);
 	}
 	@Override
 	public Geom_element getGeom() {
