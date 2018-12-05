@@ -31,8 +31,8 @@ public class Packman implements GIS_element{
 
 	@Override
 	public Meta_data getData() {
-		MetaDataF F=new MetaDataF(data);
-		return F;
+		MetaDataF metaDataf=new MetaDataF(data);
+		return metaDataf;
 	}
 
 	@Override
@@ -48,6 +48,17 @@ public class Packman implements GIS_element{
 		double radiuseat=Double.parseDouble(data[6]);
 		return radiuseat;
 		
+	}
+	public String getType() {
+		return data[0];
+	}
+	public Point3D getPoint3d() {
+		return p;
+	}
+	public String tostring() {
+		String s="";
+		s+="\n"+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+","+data[5]+","+data[6];
+		return s;
 	}
 
 }

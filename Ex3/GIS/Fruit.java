@@ -41,5 +41,16 @@ public class Fruit implements GIS_element{
 	public void translate(Point3D vec) {
 		
 	}
+	public String getType() {
+		return data[0];
+	}
+	public Point3D getPoint3d() {
+		return p;
+	}
+	public String tostring() {
+		String s="";
+		s+="\n"+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+","+data[5];
+		return s;
+	}
 
 }
