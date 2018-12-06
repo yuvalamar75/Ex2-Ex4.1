@@ -6,7 +6,7 @@ public class test {
 	public static void main(String[] args) {
 	
 					Map window = new Map();
-					window.frmPackman.setVisible(true);
+					window.frmePackman.setVisible(true);
 		
 
 }

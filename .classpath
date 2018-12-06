@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="OOP_Ex1/src"/>
 	<classpathentry kind="src" path="OOP_EX2-Ex4/src"/>
 	<classpathentry kind="src" path="Ex3"/>
-	<classpathentry kind="src" path="iamge"/>
+	<classpathentry kind="src" path="imagefolder"/>
 	<classpathentry kind="lib" path="json-simple-1.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
