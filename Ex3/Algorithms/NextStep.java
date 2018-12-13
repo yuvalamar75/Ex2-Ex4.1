@@ -1,0 +1,58 @@
+package Algorithms;
+
+import GIS.Fruit;
+import GIS.Packman;
+import Geom.Point3D;
+
+public class NextStep {
+	private int pId;
+	private int fId;
+	private double time;
+	private Fruit fruit;
+	private Packman packman;
+	
+	
+	public NextStep(int pId, int fId, double time, Fruit f, Packman packman ){
+		this.pId =  pId;
+		this.fId = fId;
+		this.time =  time;
+		this.fruit = f;
+		this.packman = packman;
+		
+
+		
+	}
+	public int getpId() {
+		return pId;
+	}
+	public void setpId(int pId) {
+		this.pId = pId;
+	}
+	public int getfId() {
+		return fId;
+	}
+	public void setfId(int fId) {
+		this.fId = fId;
+	}
+	public double getTime() {
+		return time;
+	}
+	public Fruit getFruit() {
+		return fruit;
+	}
+	public void setFruit(Fruit fruit) {
+		this.fruit = fruit;
+	}
+	public Packman getPackman() {
+		return packman;
+	}
+	public void setPackman(Packman packman) {
+		this.packman = packman;
+	}
+	public void setTime(double time) {
+		this.time = time;
+	}
+
+	
+
+}

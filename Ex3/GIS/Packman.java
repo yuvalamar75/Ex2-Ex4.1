@@ -1,6 +1,9 @@
 package GIS;
 
+import java.util.ArrayList;
+
 import Algorithms.MetaDataF;
+import Algorithms.NextStep;
 import Coords.MyCoords;
 import Geom.Circle;
 import Geom.GeomElement;
@@ -12,7 +15,9 @@ public class Packman implements GIS_element{
 	double radiusp=1;
 	Point3D p;
 	String[] data;
-	MyCoords mycoords=new MyCoords();
+	int ID;
+	ArrayList<NextStep> path=new ArrayList<>();
+	private MyCoords mycoords;
 
 	public Packman (String [] data) {
 		this.data= data;
@@ -21,6 +26,20 @@ public class Packman implements GIS_element{
 		double _z= Double.parseDouble(data[4]);
 		p=new Point3D(_x,_y,_z);
 		cp=new Circle(p, radiusp);
+		ID=Integer.parseInt(data[1]);
+		mycoords = new MyCoords();
+
+	}
+	public Packman (Packman P) {
+		this.data=P.data;
+		double x = P.p.get_x();
+		double y = P.p.get_y();
+		double z = P.p.get_z();
+		p = new Point3D(x,y,z);
+		this.cp = P.cp;
+		this.ID = P.ID;
+		mycoords=new MyCoords();
+
 	}
 	@Override
 	public Geom_element getGeom() {
@@ -60,5 +79,12 @@ public class Packman implements GIS_element{
 		s+="\n"+data[0]+","+data[1]+","+data[2]+","+data[3]+","+data[4]+","+data[5]+","+data[6];
 		return s;
 	}
+	public String getID() {
+		return data[1];
+	}
+	public MyCoords getMycoords() {
+		return mycoords;
+	}
+	
 
 }

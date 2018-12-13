@@ -62,7 +62,7 @@ public class MyCoords implements coords_converter{
 		altmeter = Math.sin(dif_radlatitude)*EARTH_RADIUS;
 		lonmeter = Math.sin(dif_radlongtuitde)*EARTH_RADIUS*lonnorm;
 
-		double distance= Math.sqrt(Math.pow(altmeter, 2)+Math.pow(lonmeter, 2));
+		double distance= Math.sqrt(Math.pow(altmeter, 2)+Math.pow(lonmeter, 2)+Math.pow(difaltitude, 2));
 		return distance;
 
 	}

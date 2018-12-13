@@ -36,7 +36,7 @@ public class MetaDataF implements Meta_data {
 		String s1="";
 		s1=s1+"Type: "+data[0]+"\n";
 		s1=s1+"ID: "+data[1]+"\n";
-		s1=s1+"Weight: "+data[5]+"\n";
+		s1=s1+"Speed: "+data[5]+"\n";
 		
 		
 		return s1;
