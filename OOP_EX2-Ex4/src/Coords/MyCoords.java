@@ -27,6 +27,7 @@ public class MyCoords implements coords_converter{
 		if(gpsn.x()>180 || gpsn.x()<-180) {
 			gpsn.set_x(((gpsn.x()+180)%360)-180);
 		}
+		
 		if(isValid_GPS_Point(gpsn)==false) return null;//test if the point is valid gps point
 
 		

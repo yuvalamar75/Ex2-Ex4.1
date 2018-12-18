@@ -22,6 +22,16 @@ public class NextStep {
 
 		
 	}
+	
+	public NextStep(NextStep nextStep) {
+		this.pId = nextStep.pId;
+		this.fId= nextStep.fId;
+		this.time =  nextStep.time;
+		this.fruit = new Fruit(nextStep.fruit);
+		this.packman = new Packman(nextStep.packman);
+		
+		// TODO Auto-generated constructor stub
+	}
 	public int getpId() {
 		return pId;
 	}
@@ -51,6 +61,12 @@ public class NextStep {
 	}
 	public void setTime(double time) {
 		this.time = time;
+	}
+	public boolean isEaten() {
+		return fruit.isEaten();
+	}
+	public void setEaten(boolean isEaten) {
+		fruit.isEaten = isEaten;
 	}
 
 	

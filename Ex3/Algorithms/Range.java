@@ -10,7 +10,13 @@ public class Range implements RangeIN {
 		this.min=min;
 		this.max=max;
 	}
-
+	
+	public Range(int min, int max) {
+		this.min=min;
+		this.max=max;
+	}
+	
+	
 
 	@Override
 	public double distance() {
@@ -18,16 +24,35 @@ public class Range implements RangeIN {
 
 	}
 
+	public double getMin() {
+		return min;
+	}
+
+
+	public double getMax() {
+		return max;
+	}
+
+
+	public double getRelation() {
+		return relation;
+	}
+
+
 	@Override
 	public double relation (double x) {
-		relation= (x-min)/distance();
+		relation = (x-min)/distance();
 		return relation;
 	}
 
 	@Override
-	public double getval(double relation) {
+	public double  getval(double relation) {
 
-		return min + relation*distance();
+		return (min + relation*distance());
+	}
+	public int  getvalI(double relation) {
+
+		return (int) (min + relation*distance());
 	}
 
 

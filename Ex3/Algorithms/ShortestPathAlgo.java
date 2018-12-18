@@ -3,6 +3,7 @@ package Algorithms;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -16,6 +17,7 @@ import GIS.GIS_layer;
 import GIS.Game;
 import GIS.Packman;
 import Geom.Point3D;
+import sun.net.www.protocol.ftp.FtpURLConnection;
 import sun.util.resources.cldr.ur.CurrencyNames_ur;
 
 public class ShortestPathAlgo {
@@ -23,119 +25,180 @@ public class ShortestPathAlgo {
 	Game game;
 	GIS_layer fruitsOrigin;
 	GIS_layer packmansOrigin;
-	GIS_layer fruits;
-	static GIS_layer packmans;	
-	static Queue<NextStep> currSteps;
+	private ArrayList<Fruit> fruits;
+	private ArrayList<Packman> packmans;	
+	private Queue <NextStep> currSteps;
 	static ArrayList<Integer> fruitId;
-	static PriorityQueue<NextStep> tempuauryPq= new PriorityQueue<>(packmans.size(),new TimeComperator());;
+	private PriorityQueue<NextStep> tempuauryPq;
 	Iterator<GIS_element> packmanIterator;
 	Iterator<GIS_element> fruitsIterator;
+	Queue<NextStep> Path;
 
 	public ShortestPathAlgo(Game game) {
 
 		this.game = game;
+		currSteps = new LinkedList<>();
 		fruitsOrigin = game.getFruitLayer();
 		packmansOrigin = game.getPackmanLayer();
-		fruits = new GISLayer(new HashSet<>());
-		packmans = new GISLayer(new HashSet<>());
+		fruits = new ArrayList<>();
+		packmans = new ArrayList<>();
+		fruitId = new ArrayList<>();
+		
 
+	}
+	
+	public void Rotation(){
+		
 		copyFruits();
 		copyPackmans();
+		if (packmans.isEmpty()) return;
+		tempuauryPq = new PriorityQueue<>(packmans.size() , new TimeComperator());
 
-
-	}
-
-
-
-	public void Rotation(){
-		fruitId = new ArrayList<>();
 
 		while (!fruits.isEmpty()) {
-			packmanIterator = packmans.iterator();
-			while (packmanIterator.hasNext()) {
 
-				Packman currentP = (Packman) packmanIterator.next();
+			for (Packman pacman : packmans) {
+
+				Packman currentP = pacman;
 				Path pacPath = new Path(currentP, fruits);
+
+				pacPath.BuildPath();
+
 				NextStep next = pacPath.getNext();
-				tempuauryPq.add(next);
 
+				if (!next.isEaten() && next!= null) {
 
+					tempuauryPq.add(next);
+				}
 			}
+
 			while (!tempuauryPq.isEmpty()) {
+
 				NextStep nextStep = tempuauryPq.poll();
-				if(!fruitId.contains(nextStep.getfId())) {
+				if(!fruitId.contains(nextStep.getfId()) && nextStep!= null) {
 					currSteps.add(nextStep);
 					fruitId.add(nextStep.getfId());
+					nextStep.getFruit().setEaten(true);
+					fruits.remove(nextStep.getFruit());
 				}
-				else {
-					continue;
-				}
+
+				/*else {
+
+					Path pacPath = new Path(nextStep.getPackman(), fruits);
+					nextStep = pacPath.getNext();
+					
+					while (nextStep.getFruit().isEaten) {
+						
+						nextStep = pacPath.getNext();
+						
+					}
+					
+					fruitId.add(nextStep.getfId());
+					currSteps.add(nextStep);
+					nextStep.getFruit().setEaten(true);
+					fruits.remove(nextStep.getFruit());
+				}*/
 			}
 
+			MovePackman(currSteps);
+			tempuauryPq.clear();
+			fruitId.clear();
+			currSteps.clear();
+
 		}
 	}
 
 
 
+	private void MovePackman(Queue <NextStep> currSteps) {
+		while (!currSteps.isEmpty()) {
 
-
-	public void MovePackman(Queue<NextStep> Rotate) {
-		while (!Rotate.isEmpty()) {
-			NextStep next = Rotate.poll();			
-			Packman p = next.getPackman();
-			Fruit f = next.getFruit();
+			NextStep nextStep = currSteps.poll();
 			
-			Point3D vector = p.getMycoords().vector3D(p.getPoint3d() , f.getPoint3d());
-			p.translate(vector);
-			f.isEaten = true;
+			Fruit fruit = nextStep.getFruit();
+			
+			Packman pacman = nextStep.getPackman();
 
+			for (GIS_element P : packmansOrigin) {
+				if (pacman.getID() == ((Packman) P).getID()){
+					NextStep newStep = new NextStep(nextStep);
 
+					Path = ((Packman) P).getPath();
+					Path.add(newStep);
+					break;
+
+				}
+
+			}
+
+			
+			for(Packman pac : packmans) {
+
+				if (pac.getID() == pacman.getID()) {
+
+					pac.getPoint3d().set_x(fruit.getPoint3d().get_x());
+
+					pac.getPoint3d().set_y(fruit.getPoint3d().get_y());
+
+					pac.getPoint3d().set_z(fruit.getPoint3d().get_z());
+					break;
+				}
+			}
 		}
 	}
 
+	public void copyFruits() {
 
-}
+		Iterator<GIS_element> fruitIterator= fruitsOrigin.iterator();
 
-}
+		while (fruitIterator.hasNext()) {
+			Fruit f = new Fruit(((Fruit)fruitIterator.next()));
+			fruits.add(f);
 
+		}
 
-public void copyFruits() {
-
-	Iterator<GIS_element> fruitIterator= fruitsOrigin.iterator();
-
-	while (fruitIterator.hasNext()) {
-		Fruit f = new Fruit(((Fruit)fruitIterator.next()));
-		fruits.add(f);
 
 	}
 
-}
+	public void copyPackmans() {
 
-public void copyPackmans() {
+		Iterator<GIS_element> packmansIterator = packmansOrigin.iterator();
 
-	Iterator<GIS_element> packmansIterator = packmansOrigin.iterator();
+		while (packmansIterator.hasNext()) {
 
-	while (packmansIterator.hasNext()) {
-		Packman f = new Packman((Packman)packmansIterator.next());
-		fruits.add(f);
+			Packman p = new Packman((Packman)packmansIterator.next());
+
+			packmans.add(p);
+		}
+	}
+
+	public ArrayList<Packman> getPackmans() {
+		return packmans;
+	}
+
+
+	public static void main(String[] args) {
+		Game game = new Game("D:\\data\\game_1543685769754.csv");
+		ShortestPathAlgo Paths = new ShortestPathAlgo(game);
+		Paths.Rotation();
+		GIS_layer packmans = game.getPackmanLayer();
+
+		Iterator<GIS_element> iterator = packmans.iterator();
+
+		while (iterator.hasNext()) {
+			Packman p = (Packman) iterator.next();
+
+			System.out.println(p.getID()+": ");
+
+			while (!p.getPath().isEmpty()) {
+
+				NextStep n = p.getPath().poll();
+
+				System.out.print("pacman id :" +n.getPackman().getID()+": "+n.getPackman().getPoint3d().get_x()+", "+ n.getPackman().getPoint3d().get_y() + " ID: "+ n.getfId()+ ", " );
+			}
+
+			System.out.println("\n");
+		}
 	}
 }
 
-
-
-/*	class PackmanThread extends Thread {
-		NextStep next;
-		public PackmanThread(NextStep next) {
-			this.next = next;
-
-		}
-		@Override
-		public void run() {
-
-
-			super.run();
-		}
-
-	}*/
-
-}

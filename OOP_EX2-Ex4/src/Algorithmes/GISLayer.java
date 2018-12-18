@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import GIS.Fruit;
 import GIS.GIS_element;
 import GIS.GIS_layer;
 import GIS.Meta_data;
@@ -18,10 +19,12 @@ import GIS.Meta_data;
 
 public class GISLayer implements GIS_layer {
 	Set<GIS_element> set;
+	Set<Fruit> setF;
 
 	public GISLayer(Set<GIS_element> set) {
 		this.set = set;
 	} 
+	
 
 	@Override
 	public boolean add(GIS_element arg0) {

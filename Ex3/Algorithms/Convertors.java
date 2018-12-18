@@ -4,12 +4,19 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
+import com.sun.prism.Image;
+
 import Geom.Point3D;
 import javafx.geometry.Point2D;
 
 public class Convertors {
 
 	Map map;
+	
+	private int height;
+	private int width;
+
+	
 
 	double TopRightX;
 	double TopRightY;
@@ -23,7 +30,8 @@ public class Convertors {
 	Range CoordsRangeY;
 	Range ImgRangeX;
 	Range ImgRangeY;
-
+	
+	BufferedImage img;
 
 	public Convertors(Map map, double LeftButtomX, double TopRightX, double LeftButtomY, double TopRightY) {
 		
@@ -43,10 +51,28 @@ public class Convertors {
 		this.LeftButtomY= LeftButtomY;
 		this.TopRightY= TopRightY;
 	}
+	
+	public Convertors(int height, int width, double LeftButtomX, double TopRightX, double LeftButtomY, double TopRightY) {
+		
+			ImgRangeX = new Range(0, width);
+			ImgRangeY = new Range(0, height);
+			
+	
+			CoordsRangeX = new Range(LeftButtomX, TopRightX);
+			CoordsRangeY = new Range(LeftButtomY, TopRightY);
+			
+			pixelMaxY = height;
+			
+			this.LeftButtomX = LeftButtomX;
+			this.TopRightX = TopRightX;
+			this.LeftButtomY = LeftButtomY;
+			this.TopRightY = TopRightY;
+			
+	}
+
+	
 
 	public Point3D pixel2Gps(double x, double y) {
-
-
 
 		// getting the relations
 
@@ -97,6 +123,19 @@ public class Convertors {
 
 
 
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 

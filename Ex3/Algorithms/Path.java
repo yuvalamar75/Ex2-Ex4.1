@@ -1,5 +1,6 @@
 package Algorithms;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -15,25 +16,29 @@ import javafx.scene.layout.Priority;
 
 public class Path {
 
-	GIS_layer fruits;
-	Packman p;
-	PriorityQueue<NextStep>  pQ;
-	NextStep next;
-	MyCoords myCoords = new MyCoords();
-	public Path(Packman p, GIS_layer fruits) {
+	private ArrayList<Fruit> fruits;
+	private Packman p;
+	private PriorityQueue<NextStep>  pQ;
+	private NextStep next;
+	private MyCoords myCoords = new MyCoords();
+	private GIS_layer fruits2;
+	
+	
+	public Path(Packman p, ArrayList<Fruit> fruits) {
 		this.p = p;
 		this.fruits = fruits;
-		pQ=new PriorityQueue<>(fruits.size(),new TimeComperator()); 
+		
+		pQ=new PriorityQueue<>(fruits.size(),new TimeComperator());
+		//copyFruits();
 
 	}
 	public void BuildPath() {
 
-		Iterator<GIS_element> it = fruits.iterator();
 
-		while(it.hasNext()) {
-			Fruit fruit = new Fruit(((Fruit)it.next()));;
+		for(int i=0 ; i<fruits.size(); i++) {
+			Fruit fruit =  fruits.get(i);
 			double time= time(p, fruit);
-			NextStep next= new NextStep(Integer.parseInt(p.getID()), Integer.parseInt(fruit.getID()), time, fruit, p);
+			NextStep next= new NextStep(p.getID(), fruit.getId(), time, fruit, p);
 			
 			pQ.add(next);
 		}
@@ -44,8 +49,8 @@ public class Path {
 
 	public double time(Packman p,Fruit f) {
 
-		int pSpeed = p.getSpeed();
-		double pRadious = p.getRadius();
+		int pSpeed = p.getSPEED();
+		double pRadious = p.getR();
 		double dis = myCoords.distance3d(p.getPoint3d(), f.getPoint3d());
 
 		if (dis==0) return 0;
@@ -66,10 +71,22 @@ public class Path {
 			return pQ.poll();
 		return null;
 	}
+	
+	public void copyFruits() {
+
+		Iterator<GIS_element> fruitIterator= fruits2.iterator();
+
+		while (fruitIterator.hasNext()) {
+			Fruit f = new Fruit(((Fruit)fruitIterator.next()));
+			fruits.add(f);
+
+		}
+
+	}
 
 
 	public static void main(String[] args) {
-		Game game= new Game("D:\\data\\game_1543684662657.csv");
+		/*Game game= new Game("C:\\Users\\1234\\Desktop\\data\\data\\game_1543684662657.csv");
 		GIS_layer pac= game.getPackmanLayer();
 		Iterator<GIS_element> it = pac.iterator();
 
@@ -84,7 +101,7 @@ public class Path {
 		System.out.println("the out pus is: ");
 		System.out.println("the pac id is "+next.getpId());
 		System.out.println("the fruit id is "+next.getfId());
-		System.out.println("the time is "+ next.getTime());
+		System.out.println("the time is "+ next.getTime());*/
 
 	}
 
