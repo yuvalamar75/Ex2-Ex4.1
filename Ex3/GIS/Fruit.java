@@ -21,6 +21,7 @@ public class Fruit implements GIS_element{
 	private int ID;
 	private double time;
 	private int weight;
+	
 	private int ratiox;
 	private int ratioy;
 	
@@ -36,6 +37,7 @@ public class Fruit implements GIS_element{
 		cf=new Circle(p, radiusf);
 		ID=Integer.parseInt(data[1]);
 		isEaten=false;
+		weight = (int)Double.parseDouble(data[5]);
 	}
 	public Fruit (Fruit F) {
 		this.data=F.data;
@@ -46,6 +48,7 @@ public class Fruit implements GIS_element{
 		this.cf = F.cf;
 		this.ID = F.ID;
 		isEaten = F.isEaten;
+		weight = F.weight;
 	}
 	public  Fruit(double x, double y,int weghit,int id) {
 		
@@ -105,6 +108,11 @@ public class Fruit implements GIS_element{
 	public int getWeight() {
 		return weight;
 	}
+	
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+	
 	public double getRadiusf() {
 		return radiusf;
 	}

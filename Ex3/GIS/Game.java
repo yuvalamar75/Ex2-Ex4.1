@@ -3,6 +3,7 @@ package GIS;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -21,7 +22,9 @@ public class Game {
 	private GIS_layer packmans;
 	private GIS_layer fruits;
 	private GIS_project game;
+	private ArrayList<Packman> packmansOrigins;
 
+	
 	public Game(Stack<GIS_layer> project) {
 
 		packmans = project.pop();
@@ -55,7 +58,7 @@ public class Game {
 
 	public void project2csv(Game p,String output) {
 		ArrayList<String> content =new ArrayList<String>();
-		String title = "Type,Id,Lat,Lon,Alt,Speed/Weight,Radius\n\b";
+		String title = "Type#Id#Lat#Lon#Alt#Speed/Weight#Radius\n\b";
 		content.add(title);
 
 		GIS_layer packmans=this.getPackmanLayer();
@@ -70,20 +73,20 @@ public class Game {
 			while(pit.hasNext()) {
 
 				Packman ptemp= (Packman) pit.next();
-				content.add(ptemp.getType()+","+ptemp.getID()+","+ptemp.getPoint3d().get_x()+","+ptemp.getPoint3d().get_y()+","+ptemp.getPoint3d().get_z()+","+ptemp.getSPEED()+","+ptemp.getR());
+				content.add(ptemp.getType()+"#"+ptemp.getID()+"#"+ptemp.getPoint3d().get_x()+"#"+ptemp.getPoint3d().get_y()+"#"+ptemp.getPoint3d().get_z()+"#"+ptemp.getSPEED()+"#"+ptemp.getR());
 				content.add("\n");
 			}
 
 
 			while(fit.hasNext()) {
 				Fruit ftemp=(Fruit) fit.next();
-				System.out.println(ftemp.getType()+","+ftemp.getId());
-				content.add(ftemp.getType()+","+ftemp.getId()+","+ftemp.getPoint3d().get_x()+","+ftemp.getPoint3d().get_y()+","+ftemp.getPoint3d().get_z()+","+ftemp.getWeight()+","+ftemp.getRadiusf());
-				
+				System.out.println(ftemp.getType()+"#"+ftemp.getId());
+				content.add(ftemp.getType()+"#"+ftemp.getId()+"#"+ftemp.getPoint3d().get_x()+"#"+ftemp.getPoint3d().get_y()+"#"+ftemp.getPoint3d().get_z()+"#"+ftemp.getWeight()+"#"+ftemp.getRadiusf());
+				content.add("\n");
 			}
 
 		
-			String data = content.toString().replace("[", "").replace("]", "");
+			String data = content.toString().replace("[", "").replace("]", "").replace(",", "").replace("#", ",");
 			System.out.println(data);
 			bw.write(data);
 			bw.close();
@@ -100,4 +103,9 @@ public class Game {
 	public GIS_layer getPackmanLayer() {
 		return packmans;
 	}
+	
+	public ArrayList<Packman> getPackmansOrigins() {
+		return packmansOrigins;
+	}
+	
 }

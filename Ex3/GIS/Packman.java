@@ -1,5 +1,6 @@
 package GIS;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,7 +26,12 @@ public class Packman implements GIS_element{
 	private int ratiox;
 	private int ratioy;
 	private MyCoords mycoords;
+	private double sum = 0;
+	private float timeStamp;
+	static final Long duration = (long) (((120 * 60)) * 1000);
+	static SimpleDateFormat df = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
 
+	
 	public Packman (String [] data) {
 		this.data= data;
 		double _x= Double.parseDouble(data[3]);
@@ -48,6 +54,8 @@ public class Packman implements GIS_element{
 		this.ID = P.ID;
 		this.path = P.path;
 		mycoords=new MyCoords();
+		sum = P.sum;
+		this.path = P.path;
 
 	}
 	public  Packman(double x, double y,int speed, int radius,int id) {
@@ -61,7 +69,6 @@ public class Packman implements GIS_element{
 		int speedP=1;
 		ID=counter;
 		mycoords = new MyCoords();
-		
 		this.ID = id;
 		
 		
@@ -106,6 +113,7 @@ public class Packman implements GIS_element{
 		return radiuseat;
 		
 	}
+	
 	public double getR() {
 		
 		return radiusp;
@@ -131,6 +139,18 @@ public class Packman implements GIS_element{
 	public Queue<NextStep> getPath() {
 		return path;
 	}
+	
+	public void setPath(Queue<NextStep> path) {
+		this.path = path;
+	}
+	
+	public double getSum() {
+		return sum;
+	}
+	public void setSum(double sum) {
+		this.sum = sum;
+	}
+	
 	
 	
 /*public static void main(String[] args) {

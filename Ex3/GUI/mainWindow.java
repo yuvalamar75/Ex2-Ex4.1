@@ -45,6 +45,7 @@ public class mainWindow extends JFrame implements MouseListener, ComponentListen
 	static boolean loadGameB;
 	static boolean buildPathB;
 	static boolean runGameB;
+	static String pathToSave;
 	static String pathFile;
 	static File file;
 	public mainWindow() {
@@ -93,14 +94,40 @@ public class mainWindow extends JFrame implements MouseListener, ComponentListen
 		Menu saveGame = new Menu("Save Game");
 		menuBar.add(saveGame);
 		
-		MenuItem save = new MenuItem("Save");
+		MenuItem save = new MenuItem("Save To CSV");
 		saveGame.add(save);
 		save.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				map.game2CSV();
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				int userSelection = fileChooser.showSaveDialog(map);
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    pathToSave = fileToSave.getAbsolutePath();
+				    Board.saveToKML(pathToSave);
+				    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+				}
+				Board.game2CSV(pathToSave);
 				
+			}
+		});
+		MenuItem saveKml = new MenuItem("Save To KML");
+		saveGame.add(saveKml);
+		saveKml.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				int userSelection = fileChooser.showSaveDialog(map);
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    pathToSave = fileToSave.getAbsolutePath();
+				    Board.saveToKML(pathToSave);
+				    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+				}
 			}
 		});
 		
@@ -136,36 +163,53 @@ public class mainWindow extends JFrame implements MouseListener, ComponentListen
 		});
 		
 		
-		Menu buildPath = new Menu("Build Path");
+		Menu buildPath = new Menu("Build Game");
 		menuBar.add(buildPath);
 		MenuItem build = new MenuItem("Build");
+		MenuItem runGame = new MenuItem("Run Game");
+		runGame.setEnabled(false);
 		buildPath.add(build);
+		buildPath.add(runGame);
+		
+		
 		build.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				buildPathB = true;
+				buildPathB = false;
+				runGameB = false;
 				
 				GISLayer fruits=new GISLayer(Board.fruitsImages);
 				GISLayer packmans=new GISLayer(Board.packmanImages);
 				
 				Stack<GIS_layer> project = new Stack<>();
 				
+				
+				
 				project.add(fruits);
 				project.add(packmans);
 				Game game = new Game(project);
 				map.buildPath(game);
+				runGameB = true;
+				runGame.setEnabled(true);
+				build.setEnabled(false);
+				
 			
 				
 			}
 		});
-		MenuItem runGame = new MenuItem("Run Game");
+		
 		buildPath.add(runGame);
+		
 		runGame.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				map.MovePackmans();
+				build.setEnabled(true);
+				runGame.setEnabled(false);
 				// TODO Auto-generated method stub
 				
 				//map.buildPackmanThreads();

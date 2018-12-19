@@ -81,6 +81,7 @@ public class ShortestPathAlgo {
 					nextStep.getFruit().setEaten(true);
 					fruits.remove(nextStep.getFruit());
 				}
+				
 
 				/*else {
 
@@ -104,8 +105,21 @@ public class ShortestPathAlgo {
 			tempuauryPq.clear();
 			fruitId.clear();
 			currSteps.clear();
+			
 
 		}
+		for(GIS_element p : packmansOrigin) {
+			Packman pt = (Packman) p;
+			System.out.println("pacman Id: "+pt.getID());
+			Queue<NextStep> next = pt.getPath();
+			System.out.println(next);
+		}
+		for(GIS_element f : fruitsOrigin) {
+			Fruit ft = (Fruit) f;
+			System.out.println("fruit Id: "+ft.getId());
+			
+		}
+		
 	}
 
 
@@ -149,13 +163,17 @@ public class ShortestPathAlgo {
 
 	public void copyFruits() {
 
-		Iterator<GIS_element> fruitIterator= fruitsOrigin.iterator();
+	Iterator<GIS_element> fruitIterator= fruitsOrigin.iterator();
 
 		while (fruitIterator.hasNext()) {
 			Fruit f = new Fruit(((Fruit)fruitIterator.next()));
 			fruits.add(f);
 
 		}
+	/*	for (GIS_element ftemp : fruitsOrigin) {
+			Fruit f = new Fruit(((Fruit) ftemp));
+			fruits.add(f);
+		}*/
 
 
 	}
