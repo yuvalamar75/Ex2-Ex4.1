@@ -1,7 +1,9 @@
 package GIS;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -27,7 +29,7 @@ public class Packman implements GIS_element{
 	private int ratioy;
 	private MyCoords mycoords;
 	private double sum = 0;
-	private float timeStamp;
+	private long timeStamp;
 	static final Long duration = (long) (((120 * 60)) * 1000);
 	static SimpleDateFormat df = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
 
@@ -41,6 +43,7 @@ public class Packman implements GIS_element{
 		cp=new Circle(p, radiusp);
 		ID=Integer.parseInt(data[1]);
 		mycoords = new MyCoords();
+		timeStamp = getUTC();
 		
 
 	}
@@ -56,6 +59,7 @@ public class Packman implements GIS_element{
 		mycoords=new MyCoords();
 		sum = P.sum;
 		this.path = P.path;
+		this.timeStamp = P.timeStamp;
 
 	}
 	public  Packman(double x, double y,int speed, int radius,int id) {
@@ -70,6 +74,7 @@ public class Packman implements GIS_element{
 		ID=counter;
 		mycoords = new MyCoords();
 		this.ID = id;
+		this.timeStamp = getUTC();
 		
 		
 	}
@@ -149,6 +154,22 @@ public class Packman implements GIS_element{
 	}
 	public void setSum(double sum) {
 		this.sum = sum;
+	}
+	public long getUTC() {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
+			String time = df.format(new Date());                            
+			
+			java.util.Date dt;
+			try {
+				dt = df.parse(time);
+				Long l = dt.getTime()+duration;
+				return l;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}                                      
+			
+		return -1;
 	}
 	
 	

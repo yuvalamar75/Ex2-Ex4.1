@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import com.sun.prism.Image;
 
+import GUI.Board;
 import Geom.Point3D;
 import javafx.geometry.Point2D;
 
@@ -16,12 +17,10 @@ public class Convertors {
 	private int height;
 	private int width;
 
-	
-
-	double TopRightX;
-	double TopRightY;
-	double LeftButtomX;
-	double LeftButtomY;
+	final double TopRightX;
+	final double TopRightY;
+	final double LeftButtomX;
+	final double LeftButtomY;
 
 	double pixelMaxY;
 	double pixelMinY;

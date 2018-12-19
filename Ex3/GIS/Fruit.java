@@ -21,7 +21,8 @@ public class Fruit implements GIS_element{
 	private int ID;
 	private double time;
 	private int weight;
-	
+	private long timeStamp;
+
 	private int ratiox;
 	private int ratioy;
 	
@@ -38,6 +39,7 @@ public class Fruit implements GIS_element{
 		ID=Integer.parseInt(data[1]);
 		isEaten=false;
 		weight = (int)Double.parseDouble(data[5]);
+		timeStamp = 0;
 	}
 	public Fruit (Fruit F) {
 		this.data=F.data;
@@ -49,6 +51,7 @@ public class Fruit implements GIS_element{
 		this.ID = F.ID;
 		isEaten = F.isEaten;
 		weight = F.weight;
+		timeStamp = 0;
 	}
 	public  Fruit(double x, double y,int weghit,int id) {
 		
@@ -58,6 +61,7 @@ public class Fruit implements GIS_element{
 		p=new Point3D(_x,_y,_z);
 		this.weight = weghit;
 		ID=id;
+		timeStamp = 0;
 		
 		
 	}
@@ -129,6 +133,12 @@ public class Fruit implements GIS_element{
 	public boolean isEaten() {
 		// TODO Auto-generated method stub
 		return isEaten;
+	}
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 	
 

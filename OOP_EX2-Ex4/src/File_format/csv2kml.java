@@ -5,11 +5,14 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import Algorithmes.GISLayer;
 import Algorithmes.ToGisElement;
@@ -35,18 +38,35 @@ public class csv2kml {
 	 * @param String for input path.
 	 * @param String for output path 
 	 */
+	NextStep[] nextSteps;
+	static final Long duration = (long) (((120 * 60)) * 1000);
+	static long pacmanTime;
+	static long fruitTime;
+	static  String fruitTimeStamp;
+	static Point3D cuurentP;
+	static long totalTime;
+	static ArrayList<NextStep> arrNextStep = new ArrayList<>();
+	
 	public static void writeFileKML(Game g , String output) {
-
+		
+		long pacmanTime = System.currentTimeMillis()-duration;
+		String PacmanKMLtime= kmlTime(pacmanTime);
+		
 		//Board map = new Board();
 
 
 		//ShortestPathAlgo SPA = new ShortestPathAlgo(g);
 		//SPA.Rotation();
-		
-		
+
+		/*	 Date dNow = new Date( ); // Instantiate a Date object
+		  Calendar cal = Calendar.getInstance();
+		  cal.setTime(dNow);
+		  cal.add(Calendar.MINUTE, 5);
+		  dNow = cal.getTime();*/
+
 		GIS_layer packmans = g.getPackmanLayer();
 		GIS_layer fruits = g.getFruitLayer();
-		
+
 		ArrayList<String> content =new ArrayList<String>();
 
 		String kmlstart = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -61,34 +81,17 @@ public class csv2kml {
 		try{
 			FileWriter fw = new FileWriter(output);
 			BufferedWriter bw = new BufferedWriter(fw);
-			for(GIS_element tempE : fruits) {
-				Fruit tempF = (Fruit) tempE;  
-				System.out.println("fruit stamp :"+tempF.getData().getUTC());
-				String data = "Type : "+tempF.getType()+",\n"+"ID : "+tempF.getId()+",\n"+"Score : "+tempF.getWeight();
-				String kmlelement =
-						"<Placemark>\n" +
-								"<Style id="+"\"cherry\""+">"+
-								"<IconStyle>"+
-								" <Icon>"+
-								"<href>http://www.clker.com/cliparts/6/e/8/4/1206561522317245030Rocket000_fruit-cherries.svg.med.png</href>"+
-								"</Icon>"+
-								" </IconStyle>"+
-								"</Style>"+
-								"<name>"+tempF.getId()+"</name>\n" +
-								"<description>\n"+data+"/n"+"</description>\n" +
-								"<Point>\n" +
-								"<coordinates>"+tempF.getPoint3d().get_x()+"&"+tempF.getPoint3d().get_y()+"&"+tempF.getPoint3d().get_z()+"</coordinates>" +
-								"</Point>\n" +
-								"</Placemark>\n";
-				content.add(kmlelement);
-
-
-			}
-
-				
+		
 			for(GIS_element tempE : packmans) {
 				Packman tempP = (Packman) tempE;
-				System.out.println("p stamp :"+tempP.getData().getUTC());
+				cuurentP = new Point3D(tempP.getPoint3d());
+				Queue<NextStep> tempNS = tempP.getPath();
+				System.out.println(tempNS.isEmpty());
+				for (NextStep next : tempNS) {
+					NextStep temp = new NextStep(next);
+					arrNextStep.add(temp);
+					
+				}
 				String data = "Type : "+tempP.getType()+",\n"+"ID : "+tempP.getID()+",\n"+"Speed : "+tempP.getSPEED()+"Score : "+tempP.getSum();
 				String kmlelement ="<Placemark>\n" +
 						"<Style id="+"\"Pacman\""+">"+
@@ -100,19 +103,17 @@ public class csv2kml {
 						"</Style>"+
 						"<name>"+tempP.getID()+"</name>\n" +
 						"<description>\n"+data+"/n"+"</description>\n" +
+						   "<TimeStamp>"+
+				       " <when>"+PacmanKMLtime+"</when>"+
+				      "</TimeStamp>"+
 						"<Point>\n" +
 						"<coordinates>"+tempP.getPoint3d().get_x()+"&"+tempP.getPoint3d().get_y()+"&"+tempP.getPoint3d().get_z()+"</coordinates>" +
 						"</Point>\n" +
 						"</Placemark>\n";
 				content.add(kmlelement);
-			}
-			for(GIS_element tempE : packmans) {
+			
 				String cordinate = "";
-				Packman tempP = ((Packman) tempE);
-				Queue<NextStep> tempNS = tempP.getPath();
-				System.out.println(tempNS.isEmpty());
-				Point3D p = new Point3D(tempP.getPoint3d());
-				System.out.println(p.get_x()+","+p.get_y()+","+p.get_z());
+				
 				String kmlElement = 
 						"<name>"+"Paths"+"</name>"+
 								" <description>"+"Examples of paths. Note that the tessellate tag is by default"+
@@ -135,24 +136,76 @@ public class csv2kml {
 								" <tessellate>1</tessellate>"+
 								"<altitudeMode>relativeToGround</altitudeMode>"
 								+"<coordinates>\n"+
-								p.get_x()+"&"+p.get_y()+"&"+p.get_z();
+								cuurentP.get_x()+"&"+cuurentP.get_y()+"&"+cuurentP.get_z();
 				content.add(kmlElement);
-				while(!tempNS.isEmpty()) {
-					NextStep next = tempNS.poll();
+				for(NextStep next : arrNextStep) {
+					NextStep nextT = next;
+					System.out.println("time is : "+nextT.getTime());
 					Point3D f = new Point3D(next.getFruit().getPoint3d());
-				
+
 					cordinate =cordinate +"\n"+
 							f.get_x()+"&"+f.get_y()+"&"+f.get_z()+"\n";
 				}
 				content.add(cordinate);
+				
 				String kmlCordinateEnd =  "\n</coordinates>"+
 						"</LineString>"+
 						"</Placemark>\n";  
 				content.add(kmlCordinateEnd);
+				for(NextStep next : arrNextStep) {
+					NextStep nextT = next;
+					Fruit tempF = nextT.getFruit(); 
+					
+					long fruitTime = (long) nextT.getTime();
+					totalTime = totalTime + fruitTime;
+					Point3D f = new Point3D(tempF.getPoint3d());
+					fruitTime = pacmanTime + TimeUnit.SECONDS.toMillis(totalTime);
+					fruitTimeStamp = kmlTime(fruitTime);		
+					String dataF = "Type : "+tempF.getType()+",\n"+"ID : "+tempF.getId()+",\n"+"Score : "+tempF.getWeight();
+					String kmlFruit ="<Placemark>\n" +
+							"<Style id="+"\"cherry\""+">"+
+							"<IconStyle>"+
+							" <Icon>"+
+							"<href>http://www.clker.com/cliparts/6/e/8/4/1206561522317245030Rocket000_fruit-cherries.svg.med.png</href>"+
+							"</Icon>"+
+							" </IconStyle>"+
+							"</Style>"+
+							"<name>"+tempF.getId()+"</name>\n" +
+							"<description>\n"+dataF+"/n"+"</description>\n" +
+							   "<TimeStamp>"+
+						       " <when>"+PacmanKMLtime+"</when>"+
+						      "</TimeStamp>"+
+							"<Point>\n" +
+							"<coordinates>"+f.get_x()+"&"+f.get_y()+"&"+f.get_z()+"</coordinates>" +
+							"</Point>\n" +
+							"</Placemark>\n";
+					content.add(kmlFruit);
+					String dataP2 = "Type : "+tempP.getType()+",\n"+"ID : "+tempP.getID()+",\n"+"Speed : "+tempP.getSPEED()+"Score : "+tempP.getSum();
+					String kmlelementP2 ="<Placemark>\n" +
+							"<Style id="+"\"Pacman\""+">"+
+							"<IconStyle>"+
+							" <Icon>"+
+							"<href>http://www.clker.com/cliparts/2/7/3/a/1225215149389018376mbtwms_Pacman.svg.med.png</href>"+
+							"</Icon>"+
+							" </IconStyle>"+
+							"</Style>"+
+							"<name>"+tempP.getID()+"</name>\n" +
+							"<description>\n"+dataP2+"/n"+"</description>\n" +
+							   "<TimeStamp>"+
+					       " <when>"+fruitTimeStamp+"</when>"+
+					      "</TimeStamp>"+
+							"<Point>\n" +
+							"<coordinates>"+f.get_x()+"&"+f.get_y()+"&"+f.get_z()+"</coordinates>" +
+							"</Point>\n" +
+							"</Placemark>\n";
+					content.add(kmlelementP2);
+					
+				}
+				arrNextStep.clear();
 			}
 
 
-			
+
 			content.add(kmlduce);
 			content.add(kmlend);
 			String csv = content.toString().replaceAll(",", "").replace("[", "").replace("]", "");
@@ -169,6 +222,14 @@ public class csv2kml {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public static String kmlTime (long time ) {
+		Date thisDate = new Date(time);
+		String timeToKML = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(thisDate);
+		timeToKML = timeToKML.replace(" ", "T");
+		timeToKML= timeToKML + "Z";
+		return timeToKML; 
+		
 	}
 
 

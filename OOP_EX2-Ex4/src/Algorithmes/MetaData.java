@@ -1,10 +1,14 @@
 package Algorithmes;
 
-import java.sql.Date;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import GIS.Meta_data;
 import Geom.Point3D;
 /*
@@ -23,9 +27,9 @@ public class MetaData implements Meta_data{
 	 /** returns the Universal Time Clock associated with this data; */
 	@Override
 	public long getUTC() {
-		   
-			String time = s[3];                            
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss");
+			String time = df.format(new Date());                            
+			
 			java.util.Date dt;
 			try {
 				dt = df.parse(time);
