@@ -3,7 +3,12 @@ package Algorithms;
 import GIS.Fruit;
 import GIS.Packman;
 import Geom.Point3D;
-
+/**
+ * this class represents the "NextStep" of each pacman.
+ * the object holds the pacman, fruit, and the time it takes the pacman to get to the fruit.
+ * @author YuvalAmar and DvirHacohen
+ *
+ */
 public class NextStep {
 	private int pId;
 	private int fId;

@@ -19,20 +19,28 @@ import GIS.Packman;
 import Geom.Point3D;
 import sun.net.www.protocol.ftp.FtpURLConnection;
 import sun.util.resources.cldr.ur.CurrencyNames_ur;
-
+/**
+ * this class holds the algorithm to calculate the paths of all the pacmans with all of the fruits.
+ * it uses the NextStep and Path Objects to do so.
+ * 
+ * 
+ * @author YuvalAmar and DvirHacohen
+ *
+ */
 public class ShortestPathAlgo {
 
-	Game game;
-	GIS_layer fruitsOrigin;
-	GIS_layer packmansOrigin;
-	private ArrayList<Fruit> fruits;
-	private ArrayList<Packman> packmans;	
+	
+	private GIS_layer fruitsOrigin;
+	private GIS_layer packmansOrigin;
 	private Queue <NextStep> currSteps;
+	private Iterator<GIS_element> packmanIterator;
+	private Iterator<GIS_element> fruitsIterator;
+	private Queue<NextStep> Path;
 	static ArrayList<Integer> fruitId;
+	private ArrayList<Packman> packmans;
+	private ArrayList<Fruit> fruits;
 	private PriorityQueue<NextStep> tempuauryPq;
-	Iterator<GIS_element> packmanIterator;
-	Iterator<GIS_element> fruitsIterator;
-	Queue<NextStep> Path;
+	private Game game;
 
 	public ShortestPathAlgo(Game game) {
 
@@ -46,7 +54,16 @@ public class ShortestPathAlgo {
 		
 
 	}
-	
+	/*
+	 *As long there are still fruits do:
+	 	*calculate each pacman path.
+	 	*get the closet step of each pacman.
+	 	*add them PriorityQueue.
+	 	*		if we ran into Collisions(two pacmans go to the same fruit) get the one with smaller time to get to it.
+	 	* add the final result to another PriorityQueue.
+	 	* send the result the "MovePackman" function.
+	 	* clear all of the lists.
+	 */
 	public void Rotation(){
 		
 		copyFruits();
@@ -82,23 +99,6 @@ public class ShortestPathAlgo {
 					fruits.remove(nextStep.getFruit());
 				}
 				
-
-				/*else {
-
-					Path pacPath = new Path(nextStep.getPackman(), fruits);
-					nextStep = pacPath.getNext();
-					
-					while (nextStep.getFruit().isEaten) {
-						
-						nextStep = pacPath.getNext();
-						
-					}
-					
-					fruitId.add(nextStep.getfId());
-					currSteps.add(nextStep);
-					nextStep.getFruit().setEaten(true);
-					fruits.remove(nextStep.getFruit());
-				}*/
 			}
 
 			MovePackman(currSteps);
@@ -108,22 +108,14 @@ public class ShortestPathAlgo {
 			
 
 		}
-		for(GIS_element p : packmansOrigin) {
-			Packman pt = (Packman) p;
-			System.out.println("pacman Id: "+pt.getID());
-			Queue<NextStep> next = pt.getPath();
-			System.out.println(next);
-		}
-		for(GIS_element f : fruitsOrigin) {
-			Fruit ft = (Fruit) f;
-			System.out.println("fruit Id: "+ft.getId());
-			
-		}
 		
 	}
 
 
-
+/*
+ * get the list of every pacman next movement.
+ *  get the pacman move to that same fruit in order to calculate from that point the next of his paths.
+ */
 	private void MovePackman(Queue <NextStep> currSteps) {
 		while (!currSteps.isEmpty()) {
 
@@ -170,12 +162,6 @@ public class ShortestPathAlgo {
 			fruits.add(f);
 
 		}
-	/*	for (GIS_element ftemp : fruitsOrigin) {
-			Fruit f = new Fruit(((Fruit) ftemp));
-			fruits.add(f);
-		}*/
-
-
 	}
 
 	public void copyPackmans() {
@@ -192,31 +178,6 @@ public class ShortestPathAlgo {
 
 	public ArrayList<Packman> getPackmans() {
 		return packmans;
-	}
-
-
-	public static void main(String[] args) {
-		Game game = new Game("D:\\data\\game_1543685769754.csv");
-		ShortestPathAlgo Paths = new ShortestPathAlgo(game);
-		Paths.Rotation();
-		GIS_layer packmans = game.getPackmanLayer();
-
-		Iterator<GIS_element> iterator = packmans.iterator();
-
-		while (iterator.hasNext()) {
-			Packman p = (Packman) iterator.next();
-
-			System.out.println(p.getID()+": ");
-
-			while (!p.getPath().isEmpty()) {
-
-				NextStep n = p.getPath().poll();
-
-				System.out.print("pacman id :" +n.getPackman().getID()+": "+n.getPackman().getPoint3d().get_x()+", "+ n.getPackman().getPoint3d().get_y() + " ID: "+ n.getfId()+ ", " );
-			}
-
-			System.out.println("\n");
-		}
 	}
 }
 

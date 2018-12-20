@@ -15,10 +15,13 @@ import Geom.Point3D;
 import javafx.scene.layout.Priority;
 
 public class Path {
-
+	/**
+	 * this class represents the path of each pacman
+	 * 
+	 */
 	private ArrayList<Fruit> fruits;
 	private Packman p;
-	private PriorityQueue<NextStep>  pQ;
+	private PriorityQueue <NextStep>  pQ;
 	private NextStep next;
 	private MyCoords myCoords = new MyCoords();
 	private GIS_layer fruits2;
@@ -32,6 +35,10 @@ public class Path {
 		//copyFruits();
 
 	}
+	/*
+	 * this function gets the fruits and using the time function decide which fruit is the closest
+	 * and build "NextStep" object with that fruit and push it into the PriorityQueue of that same path. 
+	 */
 	public void BuildPath() {
 
 
@@ -46,7 +53,9 @@ public class Path {
 		//return pQ.poll();
 	}
 
-
+/*
+ * this function calculate the time between the fruit and pacman.
+ */
 	public double time(Packman p,Fruit f) {
 
 		int pSpeed = p.getSPEED();
@@ -66,6 +75,9 @@ public class Path {
 		return pQ;
 
 	}
+	/*
+	 * return the "NextStep" object with the closest fruit from the PriorityQueue.
+	 */
 	public NextStep getNext() {
 		if (pQ.peek()!=null)
 			return pQ.poll();
@@ -81,27 +93,6 @@ public class Path {
 			fruits.add(f);
 
 		}
-
-	}
-
-
-	public static void main(String[] args) {
-		/*Game game= new Game("C:\\Users\\1234\\Desktop\\data\\data\\game_1543684662657.csv");
-		GIS_layer pac= game.getPackmanLayer();
-		Iterator<GIS_element> it = pac.iterator();
-
-		it.next();
-		Packman p = (Packman) it.next(); 
-		System.out.println(p.getData());
-		System.out.println(p.getPoint3d());
-		Path ne= new Path(p, game.getFruitLayer());
-		ne.BuildPath();
-		NextStep next = ne.getNext();
-		System.out.println("-------------------");
-		System.out.println("the out pus is: ");
-		System.out.println("the pac id is "+next.getpId());
-		System.out.println("the fruit id is "+next.getfId());
-		System.out.println("the time is "+ next.getTime());*/
 
 	}
 

@@ -3,7 +3,13 @@ package Algorithms;
 
 import com.sun.prism.paint.Color;
 
+
 import Geom.Point3D;
+
+/**
+ * this class represents line 
+ * line has 2 points and color
+ */
 
 public class Line {
 	

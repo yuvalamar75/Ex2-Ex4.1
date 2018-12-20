@@ -15,8 +15,14 @@ import Geom.GeomElement;
 import Geom.Geom_element;
 import Geom.Point3D;
 
+/**
+ * this class represnt GIS element called packman
+ * authors Yuval and Dvir
+ */
+
+
 public class Packman implements GIS_element{
-	private String type = "P";
+	private char type;
 	private int counter = 0;
 	private Circle cp;
 	private double radiusp=1;
@@ -35,6 +41,7 @@ public class Packman implements GIS_element{
 
 	
 	public Packman (String [] data) {
+		this.type = 'P';
 		this.data= data;
 		double _x= Double.parseDouble(data[3]);
 		double _y= Double.parseDouble(data[2]);
@@ -48,6 +55,8 @@ public class Packman implements GIS_element{
 
 	}
 	public Packman (Packman P) {
+		this.type = 'P';
+
 		this.data=P.data;
 		double x = P.p.get_x();
 		double y = P.p.get_y();
@@ -63,6 +72,8 @@ public class Packman implements GIS_element{
 
 	}
 	public  Packman(double x, double y,int speed, int radius,int id) {
+		this.type = 'P';
+
 		counter++;
 		double _x= x;
 		double _y= y;
@@ -124,7 +135,7 @@ public class Packman implements GIS_element{
 		return radiusp;
 		
 	}
-	public String getType() {
+	public char getType() {
 		return type ;
 	}
 	public Point3D getPoint3d() {

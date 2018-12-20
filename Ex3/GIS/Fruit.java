@@ -1,6 +1,7 @@
 package GIS;
 
 import java.util.ArrayList;
+
 import java.util.Set;
 
 import Algorithms.MetaDataF;
@@ -10,6 +11,12 @@ import GIS.Meta_data;
 import Geom.Circle;
 import Geom.Geom_element;
 import Geom.Point3D;
+
+
+/**
+ * this calss represents GIS element called fruit.
+ * 
+ */
 
 public class Fruit implements GIS_element{
 	private Circle cf;

@@ -1,7 +1,11 @@
 package Algorithms;
 
 import java.util.Comparator;
-
+/**
+ * this class define how to comparator the PrioritiesQueue.
+ * @author YuvalAmar and DvirHacohen
+ *
+ */
 public class TimeComperator implements Comparator<NextStep>{
 
 	@Override

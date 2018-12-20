@@ -6,7 +6,12 @@ import java.util.Calendar;
 
 import GIS.Meta_data;
 import Geom.Point3D;
-
+/**
+ * this class implements Meta_data_data interface.
+ * it contains all the required data of the pacman object.
+ * @author YuvalAmar 
+ *
+ */
 public class MetaDataP implements Meta_data {
 	long date;
 	String[] data;

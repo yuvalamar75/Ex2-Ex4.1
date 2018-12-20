@@ -52,18 +52,6 @@ public class csv2kml {
 		long pacmanTime = System.currentTimeMillis()-duration;
 		String PacmanKMLtime= kmlTime(pacmanTime);
 		
-		//Board map = new Board();
-
-
-		//ShortestPathAlgo SPA = new ShortestPathAlgo(g);
-		//SPA.Rotation();
-
-		/*	 Date dNow = new Date( ); // Instantiate a Date object
-		  Calendar cal = Calendar.getInstance();
-		  cal.setTime(dNow);
-		  cal.add(Calendar.MINUTE, 5);
-		  dNow = cal.getTime();*/
-
 		GIS_layer packmans = g.getPackmanLayer();
 		GIS_layer fruits = g.getFruitLayer();
 
@@ -89,8 +77,7 @@ public class csv2kml {
 				System.out.println(tempNS.isEmpty());
 				for (NextStep next : tempNS) {
 					NextStep temp = new NextStep(next);
-					arrNextStep.add(temp);
-					
+					arrNextStep.add(temp);	
 				}
 				String data = "Type : "+tempP.getType()+",\n"+"ID : "+tempP.getID()+",\n"+"Speed : "+tempP.getSPEED()+"Score : "+tempP.getSum();
 				String kmlelement ="<Placemark>\n" +
