@@ -43,11 +43,11 @@ This game gets Pacmans and fruits and moves each Pacman to his shortest path to 
 
 # Game variables
 
-#Game board
+  #Game board
 
 Game Board - a real map of Ariel University.
 
-#Pacman
+  #Pacman
 
 contains data such: 
 Location based on GPS cordinate 
@@ -55,14 +55,15 @@ Speed M/S.
 Radius eating.
 have the ability to move on the board.
 
-#Fruit
+  #Fruit
 
 Contains data such : 
 Location based on GPS cordinate.
 Points.
 The fruits doesnt have the ability to move on the board.
 
-#Start new game
+
+  #Start new game
 
 #How to create new Game
 
