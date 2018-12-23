@@ -18,10 +18,5 @@ public class test {
 		MyFrame mainwindow = new MyFrame();
 		mainwindow.setVisible(true);
 		
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		Date date = new Date(stamp.getTime());
-		System.out.println(date);
-	
-		
 	}
 }

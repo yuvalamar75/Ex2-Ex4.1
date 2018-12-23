@@ -16,8 +16,8 @@ import javafx.scene.layout.Priority;
 
 public class Path {
 	/**
-	 * this class represents the path of each pacman
-	 * 
+	 * this class represents the path of each pacman.
+	 * @author YuvalAmar and DvirHacohen
 	 */
 	private ArrayList<Fruit> fruits;
 	private Packman p;
@@ -46,15 +46,20 @@ public class Path {
 			Fruit fruit =  fruits.get(i);
 			double time= time(p, fruit);
 			NextStep next= new NextStep(p.getID(), fruit.getId(), time, fruit, p);
+			System.out.println(time);
 			
 			pQ.add(next);
 		}
+		
 
 		//return pQ.poll();
 	}
 
-/*
- * this function calculate the time between the fruit and pacman.
+/**
+ * 
+ * @param p Point
+ * @param f fruit
+ * @return the time it takes the pacman to get to the fruit
  */
 	public double time(Packman p,Fruit f) {
 
@@ -75,15 +80,18 @@ public class Path {
 		return pQ;
 
 	}
-	/*
-	 * return the "NextStep" object with the closest fruit from the PriorityQueue.
+	/**
+	 * 
+	 * @return the Nextstep intthe path
 	 */
 	public NextStep getNext() {
 		if (pQ.peek()!=null)
 			return pQ.poll();
 		return null;
 	}
-	
+	/**
+	 * copy the fruits
+	 */
 	public void copyFruits() {
 
 		Iterator<GIS_element> fruitIterator= fruits2.iterator();

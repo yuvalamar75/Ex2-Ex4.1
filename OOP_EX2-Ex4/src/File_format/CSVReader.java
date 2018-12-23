@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 
+/*
+ * this class read the content of CSV 
+ */
 public class CSVReader{
 	ArrayList<String> data;
 	

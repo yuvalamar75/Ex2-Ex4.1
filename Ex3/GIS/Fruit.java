@@ -15,7 +15,7 @@ import Geom.Point3D;
 
 /**
  * this calss represents GIS element called fruit.
- * 
+ * @author YuvalAmar and DvirHacohen
  */
 
 public class Fruit implements GIS_element{

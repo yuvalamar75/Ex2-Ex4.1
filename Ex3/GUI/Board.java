@@ -49,7 +49,7 @@ import Algorithms.NextStep;
 import Algorithms.Range;
 import Algorithms.ShortestPathAlgo;
 import Algorithms.loadFile;
-import File_format.csv2kml;
+import File_format.Path2KML;
 import GIS.Fruit;
 import GIS.GIS_element;
 import GIS.GIS_layer;
@@ -60,28 +60,26 @@ import Geom.Point3D;
 import jdk.nashorn.internal.ir.CatchNode;
 import sun.nio.cs.HistoricallyNamedCharset;
 
-
+/**
+ * this class for the panel that shows all the the variables such pacmans and fruits. 
+ * 
+ */
 public class Board extends JPanel implements MouseListener{
 
-	/**
-	 * 
-	 */
+
 	static BufferedImage mapImage,packman,cherry;
 	static Set<GIS_element> packmanImages = new HashSet<GIS_element>();
 	static Set<GIS_element> fruitsImages = new HashSet<GIS_element>();
 	static ArrayList<Line> Lines = new ArrayList<>();
-	static ArrayList<PacmanThread> PacmanThreads = new ArrayList<>();
+	private static ArrayList<PacmanThread> pacmanThreads = new ArrayList<>();
 	static Set<GIS_element> originsP = new HashSet<>();
 	static Convertors c ;
 	static Map GameMap;
-	static ShortestPathAlgo Paths;
+	static ShortestPathAlgo algorithm;
 	static Random rand = new Random();
-	static ArrayList<Line> FirstLines;
-	Game game;
-	loadFile f;
+	private Game game;
+	private loadFile f;
 
-	Range xRange;
-	Range yRange;
 
 
 	static	int ratiox;
@@ -93,15 +91,19 @@ public class Board extends JPanel implements MouseListener{
 
 	public Board() {
 
+		GameMap = new Map();
 		initGUI();
 
 		this.addMouseListener(this);
 
 	}
+	/**
+	 * this function init the GUI.
+	 */
 	private void initGUI() {
 		try {
-			mapImage = ImageIO.read(getClass().getResourceAsStream("/GUI/Ariel1.png"));
-		} catch (IOException e) {
+			mapImage = GameMap.getMyMap();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -118,29 +120,35 @@ public class Board extends JPanel implements MouseListener{
 		}
 	}
 
+	/**
+	 * this paint function paint all the variables of the program.
+	 */
 
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 
 		int width = this.getWidth();
 		int height = this.getHeight();
+
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.setStroke(new BasicStroke(300, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
 		g.drawImage(mapImage, 0, 0,width,height, this);
 
-		/*	GameMap.getConverter().setHeight(height);
-		GameMap.getConverter().setWidth(width);*/
+
 		c = new Convertors(height, width, 35.20238, 35.21236, 32.10190, 32.10569);
 
 		if (!packmanImages.isEmpty()) {
 
 			for( GIS_element p : packmanImages) {
+
 				int[] pixels = c.gps2Pixels(((Packman) p).getPoint3d());
 				g.drawImage(packman,pixels[0],pixels[1], null);
-			}
 
+			}
 		}
+
+
 
 		if (!fruitsImages.isEmpty()) {
 
@@ -163,19 +171,19 @@ public class Board extends JPanel implements MouseListener{
 
 		}
 
+
 	}
 
-
+	/**
+	 * this function comes from the mouselistner and gets the specifed place in pixels of the frame .
+	 * this function call for addTGame function.
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
 		x=e.getX();
 		y=e.getY();
-
-		System.out.println(x+", " +y);
 		addToGame();
-
-
 
 	}
 	@Override
@@ -189,150 +197,120 @@ public class Board extends JPanel implements MouseListener{
 
 
 
-	public void buildPackmanThreads(ShortestPathAlgo paths) {
-
-		for(GIS_element pacman : packmanImages) {
-			Packman currpacman = ((Packman) pacman);
-			PacmanThread pacmanT = new PacmanThread((currpacman));;
-			PacmanThreads.add(pacmanT);
-
-		}
-
-
-	}
-
-	public void MovePackmans() {
-		for (PacmanThread thread: PacmanThreads) {
-			Thread t = new Thread(thread);
-			t.start();
-		}
-	}
-
+	/**
+	 * 
+	 * @param game get the game and stat the algorithem
+	 */
 	public void buildPath(Game game) {
 
 		if (MyFrame.buildPathB) {
 
-			Paths = new ShortestPathAlgo(game);
-
-			Paths.Rotation();
-
-			GIS_layer packmans = game.getPackmanLayer();
-
-			if (packmans.isEmpty()) return;
-
-			for(GIS_element pacman : packmans) {
-
-				float r = rand.nextFloat();
-				float gx = rand.nextFloat();
-				float b = rand.nextFloat();
-				
-				
-				java.awt.Color randomColor = new java.awt.Color(r, gx, b);
-
-				GIS_element currpacman = new Packman((Packman)pacman);
-
-				Queue<NextStep> path = new LinkedList<>();
-
-				Queue<NextStep> pathOriginal = ((Packman) currpacman).getPath();
-
-				for (NextStep next: pathOriginal ) {
-					NextStep copy = new NextStep(next);
-					path.add(copy);
-				}
-
-
-				if (!path.isEmpty()) {
-
-					Line line = new Line(((Packman) currpacman).getPoint3d() , path.peek().getPackman().getPoint3d(), randomColor);
-					Lines.add(line);
-
-				}
-
-				while (!path.isEmpty()) {
-
-					NextStep nextInLine = path.poll();
-
-					Line currLine = new Line((nextInLine.getPackman()).getPoint3d() , nextInLine.getFruit().getPoint3d(),randomColor); 
-
-					Lines.add(currLine);
-				}
-			}
+			algorithm = new ShortestPathAlgo(game);
+			algorithm.start();
+			Lines = algorithm.getLines();
 
 			repaint();
-
-			buildPackmanThreads(Paths);
-
 		}
 
 	}
 
-	class PacmanThread implements Runnable{
+	/**
+	 * when press "runGame" it stars to build the pacmans
+	 */
+	public void MovePacmans() {
+		if (MyFrame.runGameB) {
+			for(GIS_element pac :packmanImages ) {
 
-		Packman p;
 
-		public PacmanThread(Packman p) {
+				Packman pacman =(Packman) pac;
+				algorithm.buildMovemnts(pacman);
+
+				PacmanThread pT = new PacmanThread(pacman,pacman.getPoint3d());
+				PacmanThread pacThread = new PacmanThread(pT);
+				pacmanThreads.add(pacThread);
+
+				pT.start();
+			}
+		}
+	}
+
+
+	//class of Threads that will moves the pacman in his path
+	public class PacmanThread extends Thread{
+
+		private Packman p;
+		private Point3D originPoint ;
+
+		public PacmanThread(Packman p,Point3D origin) {
 			this.p = p;
+			originPoint = origin;
 		} 
 
+		public PacmanThread(PacmanThread PT) {
+			this.p = PT.p;
+			this.originPoint = PT.originPoint;
+		}
+
+		public Packman getPacman() {
+			return p;
+
+		}
+
+		public Point3D getOriginePoint() {
+			return originPoint;
+
+		}
 
 		@Override
-
 		public void run() {
+			Packman save = new Packman(p);
+			originsP.add(save);
 
-			Queue<NextStep> path = p.getPath();
-			Queue<NextStep> copyPath = new LinkedList<>();
-			Packman P = new Packman(p);
+			for (int i = 0; i < p.getMovements().size(); i++) {
 
-			for (NextStep next: path) {
-				NextStep copy = new NextStep(next);
-				copyPath.add(copy);
-
-			}
-
-
-			P.setPath(copyPath);
-
-			originsP.add(P);
-
-			while(!path.isEmpty()) {
-
-				NextStep next = path.poll();
-				p.getPoint3d().setPoint(next.getFruit().getPoint3d());
-				System.out.println("Pacman "+ p.getID() + " has scored: " + next.getFruit().getWeight());
-				p.setSum(p.getSum() + next.getFruit().getWeight());
-				repaint();
+				p.getPoint3d().setPoint(p.getMovements().get(i));
+				synchronized(this) { 
+					repaint();}
 				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
+
+					this.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			System.out.println("Pacman "+ p.getID()+ " has scoard total :"+ p.getSum());
 
+			Queue<NextStep> path = p.getPath();
+
+			for (NextStep next :path ) {
+				p.getPoint3d().setPoint(next.getFruit().getPoint3d());
+				System.out.println("Pacman "+ p.getID() + " has scored: " + next.getFruit().getWeight()+" from fruit "+ next.getfId());
+				p.setSum(p.getSum() + next.getFruit().getWeight());
+			}
+			System.out.println("pacman "+ p.getID()+" has scored total: " + p.getSum());
 
 		}
 
 
+
+
 	}
 
-
+	/**
+	 * this function decide how to add something new in the game board weatherer is by adding manually or from csv file
+	 */
 	public void addToGame() {
 
 		if(MyFrame.loadGameB) {
 
 			f = new loadFile(MyFrame.file);
 			Game game = new Game(f.getFilePath());
-			
+
 			copyFruits(game.getFruitLayer());
 			copyPacmans(game.getPackmanLayer());
 
 
-			for (GIS_element p : packmanImages) {
-				System.out.println(((Packman) p).getPoint3d().get_x()+","+((Packman) p).getPoint3d().get_y());
-			}
-			for (GIS_element f : fruitsImages) {
-				System.out.println(((Fruit) f).getPoint3d().get_x()+","+((Fruit) f).getPoint3d().get_y());
-			}
-
+		
 
 		}
 
@@ -356,7 +334,9 @@ public class Board extends JPanel implements MouseListener{
 		repaint();
 
 	}
-
+	/**
+	 * this function clear all the thing that shown in tne game board .
+	 */
 	public void clear() {
 
 		if(MyFrame.clearMapB) {
@@ -364,12 +344,15 @@ public class Board extends JPanel implements MouseListener{
 			fruitsImages.clear();
 			originsP.clear();
 			Lines.clear();
-			PacmanThreads.clear();
+			pacmanThreads.clear();
 			repaint();
 		}
 
 	}
-
+	/**
+	 * this function copy the fruits to new layer
+	 * @param layer of fruits
+	 */
 	private void copyFruits(GIS_layer layer){
 		Iterator<GIS_element> it = layer.iterator();
 		while (it.hasNext()) {
@@ -378,7 +361,10 @@ public class Board extends JPanel implements MouseListener{
 		}
 
 	}
-
+	/**
+	 * this function copy the fruits to new layer
+	 * @param layer of  pacmans
+	 */
 	private void copyPacmans(GIS_layer layer){
 		Iterator<GIS_element> it = layer.iterator();
 		while (it.hasNext()) {
@@ -387,6 +373,10 @@ public class Board extends JPanel implements MouseListener{
 		}
 
 	}
+	/**
+	 * after clicking on save to CSV button this function action.
+	 * @param path of the place we want to save.
+	 */
 
 
 	public static void game2CSV(String path) {
@@ -396,6 +386,7 @@ public class Board extends JPanel implements MouseListener{
 
 		GIS_layer f = new GISLayer(fruitsImages);
 		GIS_layer p = new GISLayer(originsP);
+		//GIS_layer p = new GISLayer(packmanImages);
 		pro.add(f);
 		pro.add(p);
 		String path2 = path;
@@ -406,7 +397,10 @@ public class Board extends JPanel implements MouseListener{
 
 
 	}
-
+	/**
+	 * after clicking on save to KML  this function action.
+	 * @param output of the place we want to save.
+	 */
 	public static void saveToKML(String output) {
 		Stack<GIS_layer> project = new Stack<>();
 		GISLayer fruits=new GISLayer(fruitsImages);
@@ -414,11 +408,22 @@ public class Board extends JPanel implements MouseListener{
 		project.push(fruits );
 		project.push( packmans);
 		Game g = new Game(project);
-		csv2kml.writeFileKML(g, MyFrame.pathToSave);
+		Path2KML.writeFileKML(g, MyFrame.pathToSave,pacmanThreads);
 
 	}
-	public void drawThickLine(
-			Graphics g, int x1, int y1, int x2, int y2, int thickness, java.awt.Color c) {
+	/**
+	 * this function draw thick line for the path of the pacman.
+	 * @param g for Graphics 
+	 * @param x1 for relation
+	 * @param y1 for relation
+	 * @param x2 for relation
+	 * @param y2 for relation
+	 * @param thickness of the line 
+	 * @param c for color
+	 */
+
+	//this function come from google
+	public void drawThickLine(Graphics g, int x1, int y1, int x2, int y2, int thickness, java.awt.Color c) {
 		// The thick line is in fact a filled polygon
 		g.setColor(c);
 		int dX = x2 - x1;
@@ -428,7 +433,7 @@ public class Board extends JPanel implements MouseListener{
 
 		double scale = (double)(thickness) / (2 * lineLength);
 
-		// The x,y increments from an endpoint needed to create a rectangle...
+		// The x,y increments from an end point needed to create a rectangle...
 		double ddx = -scale * (double)dY;
 		double ddy = scale * (double)dX;
 		ddx += (ddx > 0) ? 0.5 : -0.5;
@@ -436,7 +441,7 @@ public class Board extends JPanel implements MouseListener{
 		int dx = (int)ddx;
 		int dy = (int)ddy;
 
-		// Now we can compute the corner points...
+		//compute the corner points.
 		int xPoints[] = new int[4];
 		int yPoints[] = new int[4];
 

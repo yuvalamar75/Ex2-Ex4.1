@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -34,10 +37,11 @@ import javafx.scene.layout.Border;
 public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 
 	/**
-	 * 
+	 * this class contain the game board panel.
 	 */
 	private static final long serialVersionUID = 1L;
 	private Board map;
+
 	static boolean fruitB;
 	static boolean packmanB;
 	static boolean addToMapB;
@@ -49,17 +53,27 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 	static String pathToSave;
 	static String pathFile;
 	static File file;
+	static 	Image image;
+
 	public MyFrame() {
+
+
 
 		map = new Board();
 		this.setVisible(true);
+		try {
+			image = ImageIO.read(getClass().getResourceAsStream("/GUI/pacmanimage.png"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		this.setIconImage(image);
 		this.setBounds(100,100,Board.mapImage.getWidth(),Board.mapImage.getHeight());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setContentPane(map);
 		this.setTitle("Packman");
 
 		this.addComponentListener(this);
-
 
 		MenuBar menuBar = new MenuBar();
 		this.setMenuBar(menuBar);
@@ -73,7 +87,7 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				saveFileB = false;
 				addToMapB = false;
 				buildPathB = false;
@@ -81,8 +95,9 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 				loadGameB = true;
 				packmanB = false;
 				fruitB = false;
-				loadGame.setEnabled(false);
 				
+				loadGame.setEnabled(false);
+
 				JFileChooser jfc = new JFileChooser();
 				FileNameExtensionFilter filter = new FileNameExtensionFilter(
 						"CSV files (*csv)", "csv");
@@ -92,19 +107,18 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 				{
 					file = jfc.getSelectedFile();
 					pathFile = file.getAbsolutePath();
+					map.addToGame();
 				}
-				map.addToGame();
 			}
-
-
-
 		});
+
 		Menu saveGame = new Menu("Save Game");
 		menuBar.add(saveGame);
+		saveGame.setEnabled(false);
 
 		MenuItem save = new MenuItem("Save To CSV");
 		saveGame.add(save);
-		saveGame.setEnabled(false);
+		saveGame.setEnabled(true);
 		save.addActionListener(new ActionListener() {
 
 			@Override
@@ -116,14 +130,13 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 				buildPathB = false;
 				runGameB = false;
 				saveFileB = true;
-				
+
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Specify a file to save");   
 				int userSelection = fileChooser.showSaveDialog(map);
 				if (userSelection == JFileChooser.APPROVE_OPTION) {
 					File fileToSave = fileChooser.getSelectedFile();
 					pathToSave = fileToSave.getAbsolutePath();
-					Board.saveToKML(pathToSave);
 					System.out.println("Save as file: " + fileToSave.getAbsolutePath());
 				}
 				Board.game2CSV(pathToSave);
@@ -179,16 +192,16 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
 				buildPathB = true;
 				runGameB = false;
+				saveFileB = true;
 
 				GISLayer fruits=new GISLayer(Board.fruitsImages);
 				GISLayer packmans=new GISLayer(Board.packmanImages);
 
 				Stack<GIS_layer> project = new Stack<>();
-				
-				
+
+
 				project.add(fruits);
 				project.add(packmans);
 				Game game = new Game(project);
@@ -204,20 +217,17 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 		});
 
 		buildPath.add(runGame);
-
 		runGame.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				runGameB = true;
-				map.MovePackmans();
+				saveGame.setEnabled(true);
 				build.setEnabled(true);
 				runGame.setEnabled(false);
-				saveGame.setEnabled(true);
+				map.MovePacmans();
+
 			}
 		});
-
-
 
 		MenuItem saveKml = new MenuItem("Save To KML");
 		saveGame.add(saveKml);
@@ -240,6 +250,8 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 
 		Menu clearGame = new Menu("Clear Game");
 		menuBar.add(clearGame);
+		runGame.setEnabled(false);
+		saveGame.setEnabled(false);
 
 		MenuItem clear = new MenuItem("Clear");
 		add.add(clear);
@@ -251,15 +263,11 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 				clearMapB = true;
 				loadGameB = false;
 				loadGame.setEnabled(true);
+				saveGame.setEnabled(false);
 				map.clear();
 
 			}
 		});
-
-
-
-
-
 	}
 	public boolean  getFruitB() {
 		return fruitB;
@@ -292,5 +300,7 @@ public class MyFrame extends JFrame implements MouseListener, ComponentListener{
 	}
 	@Override
 	public void componentShown(ComponentEvent e) {}
-
+	public Board getMap() {
+		return map;
+	}
 }

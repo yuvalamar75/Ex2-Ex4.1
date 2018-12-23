@@ -1,7 +1,7 @@
 package Algorithms;
 
 /**
- * this class represents Range
+ * this class represents Range and it implements RangeN (see Javadoc there).
  * it calculates the distance, relation and value in relation 
  * @author YuvalAmar and DvirHacohen
  *
@@ -11,6 +11,11 @@ public class Range implements RangeIN {
 	double max;
 	double relation;
 
+	/**
+	 * 
+	 * @param min get the min value
+	 * @param max get the maximun value
+	 */
 	public Range(double min, double max) {
 		this.min=min;
 		this.max=max;
@@ -21,19 +26,19 @@ public class Range implements RangeIN {
 		this.max=max;
 	}
 	
-
+	
 	@Override
 	public double distance() {
 		return max-min;
 
 	}
-
+	
 	@Override
 	public double relation (double x) {
 		relation = (x-min)/distance();
 		return relation;
 	}
-
+	
 	@Override
 	public double  getval(double relation) {
 
@@ -44,12 +49,13 @@ public class Range implements RangeIN {
 		return (int) (min + relation*distance());
 	}
 
-
+	
 	@Override
-	public boolean isIn(Object arg) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isIn(double number) {
+
+		return (number>min && number <max);
 	}
+	
 	
 	public double getMin() {
 		return min;

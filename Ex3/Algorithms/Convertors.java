@@ -52,7 +52,15 @@ public class Convertors {
 		this.LeftButtomY= LeftButtomY;
 		this.TopRightY= TopRightY;
 	}
-	//this constructor can build by size of an given img and 2 GPS points
+	/**
+	 * 
+	 * @param height 
+	 * @param width
+	 * @param LeftButtomX the bottom GPS coordinate latitude 
+	 * @param TopRightX the top GPS coordinate latitude 
+	 * @param LeftButtomY the bottom GPS coordinate longtitude 
+	 * @param TopRightY the top GPS coordinate longtitude 
+	 */
 	public Convertors(int height, int width, double LeftButtomX, double TopRightX, double LeftButtomY, double TopRightY) {
 		
 			ImgRangeX = new Range(0, width);
@@ -78,7 +86,12 @@ public class Convertors {
 	 	we need to switch the result like a mirror.
 	 */
 	
-
+	/**
+	 * 
+	 * @param x pixel X
+	 * @param y pixel Y
+	 * @return point converted by x and y pixels
+	 */
 	public Point3D pixel2Gps(double x, double y) {
 
 		// getting the relations
@@ -109,7 +122,12 @@ public class Convertors {
 		return p;
 
 	}
-
+	
+	/**
+	 * 
+	 * @param p Point to be converted
+	 * @return the pixels of this point in img
+	 */
 	public  int [] gps2Pixels(Point3D p) {
 		// getting the relations
 		

@@ -24,6 +24,7 @@ import File_format.CSVReader;
 /**
  * this class represent game.
  * it can be build either by given path or either by given fruits and pacmans.
+ * @author YuvalAmar and DvirHacohen
  */
 
 public class Game {
@@ -39,6 +40,10 @@ public class Game {
 		fruits = project.pop();
 
 	}
+	/**
+	 * 
+	 * @param path the path in computer where the file is
+	 */
 	public  Game(String path) {
 
 		packmans = new GISLayer(new HashSet<>());
@@ -64,7 +69,11 @@ public class Game {
 
 	}
 
-
+/**
+ * 
+ * @param p game p
+ * @param output puts the csv file in that output path
+ */
 	public void project2csv(Game p,String output) {
 		ArrayList<String> content =new ArrayList<String>();
 		String title = "Type#Id#Lat#Lon#Alt#Speed/Weight#Radius\n";
@@ -96,7 +105,6 @@ public class Game {
 
 		
 			String data = content.toString().replace("[", "").replace("]", "").replaceAll(" ", "").replace(",", "").replace("#", ",");
-			System.out.println(data);
 			bw.write(data);
 			bw.close();
 

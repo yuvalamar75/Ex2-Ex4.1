@@ -21,7 +21,10 @@ public class MetaDataF implements Meta_data {
 	public MetaDataF(String [] data) {
 		this.data= data;
 	}
-
+	 /*
+	  * (non-Javadoc)
+	  * @see GIS.Meta_data#getUTC()
+	  */
 	@Override
 	public long getUTC() {
 		String time = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss").format(Calendar.getInstance().getTime());;                            

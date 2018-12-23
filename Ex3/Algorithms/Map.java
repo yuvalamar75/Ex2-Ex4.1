@@ -31,8 +31,8 @@ public class Map {
 	static double LeftButtomX=35.20238;
 	static double LeftButtomY=32.10190;
 
-	private double mapWidth;
-	private double mapHeight;
+	private int mapWidth;
+	private int mapHeight;
 
 	
 /*
@@ -51,13 +51,13 @@ public class Map {
 		this.mapHeight = myMap.getHeight();
 
 		
-		converter = new Convertors(this, LeftButtomX, TopRightX, LeftButtomY, TopRightY);
+		converter = new Convertors(mapHeight,mapWidth, LeftButtomX, TopRightX, LeftButtomY, TopRightY);
 		
 	}
 
-	
-	/*
+	/**
 	 * load image from given path and create converter object.
+	 * @param path where the img in
 	 */
 	public Map(String path) {
 		try {
@@ -70,9 +70,14 @@ public class Map {
 		mapWidth = myMap.getWidth();
 		mapHeight = myMap.getHeight();
 
-		converter = new Convertors(this, LeftButtomX, TopRightX, LeftButtomY, TopRightY);
+		converter = new Convertors(mapHeight ,mapWidth, LeftButtomX, TopRightX, LeftButtomY, TopRightY);
 	}
-/*	
+/**
+ * 	this function get 2 pixels and return the distance.
+ * @param p0 array for point0
+ * @param p1 array for point1
+ * @return the distanced between 2pixels
+ */
 	public double dis2 (int [] p0, int [] p1) {
 		Point3D p = converter.pixel2Gps(p0[0], p0[1]);
 		Point3D p2 = converter.pixel2Gps(p1[0], p1[1]);
@@ -80,7 +85,7 @@ public class Map {
 		double dis = p.distance3D(p2);
 		return dis;
 
-	}*/
+	}
 	
 	public double getMapWidth() {
 		return mapWidth;
