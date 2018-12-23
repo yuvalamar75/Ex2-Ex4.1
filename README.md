@@ -35,5 +35,66 @@ folder that contains some csv files will be GISproject.
    GIS_element,GIS_layer,GIS_project,Meta_data:the intefaces that we used in Algorithms.
     
     
-   
+   # The Pacman Game
+
+Wellcom to Dvir&Yuval Pacman game!
+
+This game gets Pacmans and fruits and moves each Pacman to his shortest path to his fruits. 
+
+# Game variables
+
+#Game board
+
+Game Board - a real map of Ariel University.
+
+#Pacman
+
+contains data such: 
+Location based on GPS cordinate 
+Speed M/S.
+Radius eating.
+have the ability to move on the board.
+
+#Fruit
+
+Contains data such : 
+Location based on GPS cordinate.
+Points.
+The fruits doesnt have the ability to move on the board.
+
+#Start new game
+
+#How to create new Game
+
+there is 2 ways to create a new game:
+
+1)adding fruits by clicking on the ADD button (Pacman or Fruit) and then clickig on the specfied location on the map.
+2)addind exsiting game by clickig on the Load File button.
+  by clicking Load File button you add fruits and pacmans by reading the CSV.
   
+  #Run the Game
+  
+  after adding some fruits and Pacmans you should click on BUILD GAME button and then on RUN button.
+  
+  BUILD GAME - Build Game button shows you the path for each pacman.
+               each path have diffrent color.
+               
+  RUN - makes the Pacmans move on their paths.
+        the pacman actualy move from fruit to fruit.
+  
+   #Export the Game
+   
+    there is tow diffrent ways to export the game.
+    the SAVE FILE bouttn in game borad including tow optins.
+    
+    1)New CSV file
+      create CSV file with the location and the data of the fruits and pacmans that add to the game. 
+    2)KML file
+      create KML file that shows the pacmnas and the fruit in google Erth.
+      you can also see the movement of the pacmans in his path,based on the eating time for each fruit.
+      
+      
+    Enjoy the game!! 
+    
+    
+               
