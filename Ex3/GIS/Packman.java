@@ -15,11 +15,18 @@ import Geom.GeomElement;
 import Geom.Geom_element;
 import Geom.Point3D;
 
+/**
+ * this class represnt GIS element called packman
+ * authors Yuval and Dvir
+ */
+
+
 public class Packman implements GIS_element{
-	private String type = "P";
+	private ArrayList<Point3D> movements;
+	private char type;
 	private int counter = 0;
 	private Circle cp;
-	private double radiusp=1;
+	private int radiusp=1;
 	private int speedP=1;
 	private Point3D p;
 	private String[] data;
@@ -35,6 +42,8 @@ public class Packman implements GIS_element{
 
 	
 	public Packman (String [] data) {
+		this.movements = new ArrayList<>();
+		this.type = 'P';
 		this.data= data;
 		double _x= Double.parseDouble(data[3]);
 		double _y= Double.parseDouble(data[2]);
@@ -48,6 +57,8 @@ public class Packman implements GIS_element{
 
 	}
 	public Packman (Packman P) {
+		this.type = 'P';
+		this.movements = P.movements;
 		this.data=P.data;
 		double x = P.p.get_x();
 		double y = P.p.get_y();
@@ -63,6 +74,8 @@ public class Packman implements GIS_element{
 
 	}
 	public  Packman(double x, double y,int speed, int radius,int id) {
+		this.type = 'P';
+		this.movements= new ArrayList<>();
 		counter++;
 		double _x= x;
 		double _y= y;
@@ -70,7 +83,7 @@ public class Packman implements GIS_element{
 		p=new Point3D(_x,_y,_z);
 		this.radiusp = radius;
 		cp=new Circle(p, radius);
-		int speedP=1;
+		this.speedP=speed;
 		ID=counter;
 		mycoords = new MyCoords();
 		this.ID = id;
@@ -119,12 +132,12 @@ public class Packman implements GIS_element{
 		
 	}
 	
-	public double getR() {
+	public int getR() {
 		
 		return radiusp;
 		
 	}
-	public String getType() {
+	public char getType() {
 		return type ;
 	}
 	public Point3D getPoint3d() {
@@ -172,14 +185,12 @@ public class Packman implements GIS_element{
 		return -1;
 	}
 	
-	
-	
-/*public static void main(String[] args) {
-	Packman p = new Packman(1, 2, 1, 1, 1);
-	Point3D v = new Point3D(1323123,1322,13212);
-	p.translate(v);
-	System.out.println(p.getPoint3d().get_x()+", "+p.getPoint3d().get_y()+", "+ p.getPoint3d().get_z());
-}*/
-	
+	public ArrayList<Point3D> getMovements() {
+		return movements;
+	}
+	public void setMovements(ArrayList<Point3D> movements) {
+		this.movements = movements;
+	}
+
 
 }

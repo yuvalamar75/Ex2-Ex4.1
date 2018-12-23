@@ -14,9 +14,15 @@ import GIS.GIS_layer;
 import GIS.GIS_project;
 import GIS.Packman;
 
+
+/**
+ * this class create window to browse csv files from user computer.
+ * @param file
+ */
 public class loadFile {
 	private File file;
 	private String filePath;
+	
 	
 	
 	public loadFile(File file) {

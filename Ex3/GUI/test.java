@@ -13,16 +13,10 @@ import Algorithms.Convertors;
 import Geom.Point3D;
 
 public class test {
-	public static void main(String[] args) {
-		mainWindow mainwindow = new mainWindow();
-		mainwindow.setVisible(true);
-		
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		Date date = new Date(stamp.getTime());
-		System.out.println(date);
 	
-		
-		
+	public static void main(String[] args) {
+		MyFrame mainwindow = new MyFrame();
+		mainwindow.setVisible(true);
 		
 	}
 }

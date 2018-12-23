@@ -7,6 +7,12 @@ import java.util.Calendar;
 import GIS.Meta_data;
 import Geom.Point3D;
 
+/**
+ * this class implements Meta_data_data interface.
+ * it contains all the required data of the fruit object.
+ * @author YuvalAmar and DvirHacohen
+ *
+ */
 public class MetaDataF implements Meta_data {
 	long date;
 	String[] data;
@@ -15,7 +21,10 @@ public class MetaDataF implements Meta_data {
 	public MetaDataF(String [] data) {
 		this.data= data;
 	}
-
+	 /*
+	  * (non-Javadoc)
+	  * @see GIS.Meta_data#getUTC()
+	  */
 	@Override
 	public long getUTC() {
 		String time = new SimpleDateFormat("yyyy-dd-MM hh:mm:ss").format(Calendar.getInstance().getTime());;                            

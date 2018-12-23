@@ -15,10 +15,13 @@ import Geom.Point3D;
 import javafx.scene.layout.Priority;
 
 public class Path {
-
+	/**
+	 * this class represents the path of each pacman.
+	 * @author YuvalAmar and DvirHacohen
+	 */
 	private ArrayList<Fruit> fruits;
 	private Packman p;
-	private PriorityQueue<NextStep>  pQ;
+	private PriorityQueue <NextStep>  pQ;
 	private NextStep next;
 	private MyCoords myCoords = new MyCoords();
 	private GIS_layer fruits2;
@@ -32,6 +35,10 @@ public class Path {
 		//copyFruits();
 
 	}
+	/*
+	 * this function gets the fruits and using the time function decide which fruit is the closest
+	 * and build "NextStep" object with that fruit and push it into the PriorityQueue of that same path. 
+	 */
 	public void BuildPath() {
 
 
@@ -39,14 +46,21 @@ public class Path {
 			Fruit fruit =  fruits.get(i);
 			double time= time(p, fruit);
 			NextStep next= new NextStep(p.getID(), fruit.getId(), time, fruit, p);
+			System.out.println(time);
 			
 			pQ.add(next);
 		}
+		
 
 		//return pQ.poll();
 	}
 
-
+/**
+ * 
+ * @param p Point
+ * @param f fruit
+ * @return the time it takes the pacman to get to the fruit
+ */
 	public double time(Packman p,Fruit f) {
 
 		int pSpeed = p.getSPEED();
@@ -66,12 +80,18 @@ public class Path {
 		return pQ;
 
 	}
+	/**
+	 * 
+	 * @return the Nextstep intthe path
+	 */
 	public NextStep getNext() {
 		if (pQ.peek()!=null)
 			return pQ.poll();
 		return null;
 	}
-	
+	/**
+	 * copy the fruits
+	 */
 	public void copyFruits() {
 
 		Iterator<GIS_element> fruitIterator= fruits2.iterator();
@@ -81,27 +101,6 @@ public class Path {
 			fruits.add(f);
 
 		}
-
-	}
-
-
-	public static void main(String[] args) {
-		/*Game game= new Game("C:\\Users\\1234\\Desktop\\data\\data\\game_1543684662657.csv");
-		GIS_layer pac= game.getPackmanLayer();
-		Iterator<GIS_element> it = pac.iterator();
-
-		it.next();
-		Packman p = (Packman) it.next(); 
-		System.out.println(p.getData());
-		System.out.println(p.getPoint3d());
-		Path ne= new Path(p, game.getFruitLayer());
-		ne.BuildPath();
-		NextStep next = ne.getNext();
-		System.out.println("-------------------");
-		System.out.println("the out pus is: ");
-		System.out.println("the pac id is "+next.getpId());
-		System.out.println("the fruit id is "+next.getfId());
-		System.out.println("the time is "+ next.getTime());*/
 
 	}
 
