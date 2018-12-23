@@ -50,6 +50,18 @@ Wellcom to Dvir&Yuval Pacman game!
 
 This game gets Pacmans and fruits and moves each Pacman to his shortest path to his fruits. 
 
+some information about the convert that we made for inserting the right points of pacman or fruit.
+
+class range - this class gets a range and return the realation of the point in this range.
+              this class helps us to  know the exact location of the pixel that the gps cordinate represnt.
+              
+class convert - this class use the calculation of that comes from the range class and convert from gps cordinate to pixels 
+                the opsite way.we use the the resolution of the the ariel1.png file to make the right relation.
+                
+              
+
+
+
 # Game variables
 
   #Game board
