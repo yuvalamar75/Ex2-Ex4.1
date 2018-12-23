@@ -38,6 +38,12 @@ folder that contains some csv files will be GISproject.
     
     
   # OOP_EX3
+  
+  information about how we insert pacmens and fruits in the right place in the pixels from gps cordinate and the oppsite way.
+  we create class range we get 
+  
+  
+  
    # The Pacman Game
 
 Wellcom to Dvir&Yuval Pacman game!
