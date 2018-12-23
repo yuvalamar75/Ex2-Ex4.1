@@ -18,13 +18,13 @@ public interface RangeIN {
 	public double relation(double x);
 	/**
 	 * 
-	 * @param the relation
+	 * @param relation the relation
 	 * @return the value of the relation
 	 */
 	public double getval(double relation);
 	/**
 	 * 
-	 * @param number
+	 * @param number value of gps cordinate
 	 * @return if it is in the range
 	 */
 	boolean isIn(double number);
