@@ -35,6 +35,9 @@ folder that contains some csv files will be GISproject.
    GIS_element,GIS_layer,GIS_project,Meta_data:the intefaces that we used in Algorithms.
     
     
+    
+    
+  # OOP_EX3
    # The Pacman Game
 
 Wellcom to Dvir&Yuval Pacman game!
@@ -83,19 +86,20 @@ there is 2 ways to create a new game:
   RUN - makes the Pacmans move on their paths.
         the pacman actualy move from fruit to fruit.
   
+  
    #Export the Game
    
-    there is tow diffrent ways to export the game.
-    the SAVE FILE bouttn in game borad including tow optins.
+   there is 2 diffrent ways to export the game.
+   the SAVE FILE bouttn in game borad including tow optins.
     
-    1)New CSV file
-      create CSV file with the location and the data of the fruits and pacmans that add to the game. 
-    2)KML file
-      create KML file that shows the pacmnas and the fruit in google Erth.
-      you can also see the movement of the pacmans in his path,based on the eating time for each fruit.
+   1)New CSV file
+     create CSV file with the location and the data of the fruits and pacmans that add to the game. 
+   2)KML file
+     create KML file that shows the pacmnas and the fruit in google Erth.
+     you can also see the movement of the pacmans in his path,based on the eating time for each fruit.
       
       
-    Enjoy the game!! 
+   Enjoy the game!! 
     
     
                
